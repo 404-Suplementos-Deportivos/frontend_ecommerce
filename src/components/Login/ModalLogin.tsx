@@ -15,6 +15,7 @@ const ModalLogin = () => {
   const dispatch = useAppDispatch()
 
   const closeHandler = () => {
+    loginHandler(true)
     dispatch(toggleModalLogin(false))
   }
 
