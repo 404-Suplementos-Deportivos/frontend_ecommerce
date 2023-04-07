@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { Modal, Input, Row, Checkbox, Button, Text, FormElement, Loading } from "@nextui-org/react"
 import { Usuario, UsuarioSchema, UsuarioType } from "@/interfaces/Usuario"
+import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
+import { showToast } from "@/store/features/design/designSlice"
 import axios from '@/libs/axios'
 
 interface RegisterProps {
@@ -10,6 +12,8 @@ interface RegisterProps {
 interface RegisterState {
   usuario: Usuario
   loading: boolean
+  passwordConfirm: string
+  formErrors: ErrorForm[]
 }
 
 type ErrorForm = {
@@ -30,9 +34,10 @@ const INITIAL_VALUES: Usuario = {
 }
 
 const Register = ({closeHandler}: RegisterProps) => {
+  const dispatch = useAppDispatch()
   const [usuario, setUsuario] = useState<RegisterState['usuario']>(INITIAL_VALUES)
-  const [passwordConfirm, setPasswordConfirm] = useState<string>('')
-  const [formErrors, setFormErrors] = useState([{}]);
+  const [passwordConfirm, setPasswordConfirm] = useState<RegisterState['passwordConfirm']>('')
+  const [formErrors, setFormErrors] = useState<RegisterState['formErrors']>([{}]);
   const [loading, setLoading] = useState<RegisterState['loading']>(false)
 
   const handleChange = (e: InputChange) => {
@@ -46,15 +51,20 @@ const Register = ({closeHandler}: RegisterProps) => {
 
   const handleSubmit = async () => {
     if (!validateForm()) return
-    console.log( 'Enviando' )
-    console.log( usuario )
     try {
       setLoading(true)
-      await axios.post('/auth/register', usuario)
+      const { data } = await axios.post('/auth/register', usuario)
       setUsuario(INITIAL_VALUES)
       closeHandler()
+      dispatch(showToast({
+        type: 'success',
+        message: data.message
+      }))
     } catch (error: any) {
-      console.log(error)
+      dispatch(showToast({
+        type: 'error',
+        message: error.response.data.message
+      }))
     } finally {
       setLoading(false)
     }

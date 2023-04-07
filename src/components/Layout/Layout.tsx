@@ -2,6 +2,8 @@ import Head from 'next/head'
 import Header from './Header'
 import Footer from './Footer'
 import { useAppSelector } from '@/hooks/useReduxStore'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   children: React.ReactNode | JSX.Element | JSX.Element[]
@@ -27,7 +29,11 @@ export default function Layout({children, title, description=desc}: Props) {
 
       <div className={`${isNavbarOpen && 'overflow-hidden h-screen'}`}>
         <Header />
-        {children}
+          {children}
+          <ToastContainer
+            pauseOnHover
+            theme="dark"
+          />
         <Footer />
       </div>
     </>
