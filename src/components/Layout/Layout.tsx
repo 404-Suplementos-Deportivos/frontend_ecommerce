@@ -33,6 +33,8 @@ export default function Layout({children, title, description=desc}: Props) {
           <ToastContainer
             pauseOnHover
             theme="dark"
+            autoClose={2000}
+            style={{ zIndex: '10000' }}
           />
         <Footer />
       </div>

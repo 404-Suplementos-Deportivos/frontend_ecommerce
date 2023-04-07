@@ -2,6 +2,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { ChevronDownIcon, UserIcon } from '@heroicons/react/24/outline'
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
+import { clearUsuarioAuth } from "@/store/features/auth/authSlice"
 import { toggleModalLogin } from "@/store/features/design/designSlice"
 
 interface NavbarMobileState {
@@ -10,6 +11,7 @@ interface NavbarMobileState {
 
 const NavbarMobile = () => {
   const isNavbarOpen = useAppSelector(state => state.design.isNavbarToggled)
+  const userAuth = useAppSelector(state => state.auth.usuario)
   const [isSubMenuItemOpen, setIsSubMenuItemOpen] = useState<NavbarMobileState['isSubMenuItemOpen']>(false)
   const dispatch = useAppDispatch()
 
@@ -50,9 +52,22 @@ const NavbarMobile = () => {
               <Link href="/ayuda">Contacta con nosotros</Link>
             </div>
           </div>
-          <div className="mt-12 text-blanco flex flex-row gap-2 px-2" onClick={() => dispatch(toggleModalLogin(true))}>
+          <div className="mt-12 text-blanco flex flex-row gap-2 px-2">
             <UserIcon className="h-6 w-6" />
-            <p>Iniciar Sesion o Crear una cuenta</p>
+            {userAuth ? (
+              <>
+                <Link href={'/mi-cuenta'}>Mi Cuenta: {userAuth.email}</Link>
+                {' | '}
+                <button onClick={() => dispatch(clearUsuarioAuth())}>Cerrar Sesion</button>
+              </>
+            ) : (
+              <p 
+                className="cursor-pointer" 
+                onClick={() => dispatch(toggleModalLogin(true))}
+              >
+                Iniciar Sesion o Crear una cuenta
+              </p>
+            )}
           </div>
         </nav>
       </div>

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Modal, Input, Row, Checkbox, Button, Text, FormElement, Loading } from "@nextui-org/react"
 import { Usuario, UsuarioSchema, UsuarioType } from "@/interfaces/Usuario"
-import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
+import { useAppDispatch } from "@/hooks/useReduxStore"
 import { showToast } from "@/store/features/design/designSlice"
 import axios from '@/libs/axios'
 
