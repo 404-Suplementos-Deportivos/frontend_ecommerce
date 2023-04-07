@@ -1,23 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { PayloadAction } from "@reduxjs/toolkit/dist/createAction"
+import { UsuarioAuth } from "@/interfaces/UsuarioAuth"
 
 interface AuthState {
-  token: string | null
+  usuario: UsuarioAuth | null
+  token: string | undefined
 }
 
 const INITIAL_STATE: AuthState = {
-  token: null
+  usuario: null,
+  token: ''
 }
 
 export const authSlice = createSlice({
   name: "auth",
   initialState: INITIAL_STATE,
   reducers: {
-    setToken(state, action: PayloadAction<string | null>) {
-      state.token = action.payload;
+    setUsuarioAuth: (state, action: PayloadAction<UsuarioAuth>) => {
+      state.usuario = action.payload
+      state.token = action.payload.token
+      localStorage.setItem('usuario', JSON.stringify(action.payload))
+    },
+    clearUsuarioAuth: (state) => {
+      state.usuario = null
+      state.token = ''
+      localStorage.removeItem('usuario')
     }
   }
 });
 
-export const { setToken } = authSlice.actions;
+export const { setUsuarioAuth, clearUsuarioAuth } = authSlice.actions;
 export default authSlice.reducer;
+
+export const setUsuarioAuthFromLocalStorage = () => (dispatch: any) => {
+  const usuario = localStorage.getItem('usuario')
+  if (usuario) {
+    dispatch(setUsuarioAuth(JSON.parse(usuario)))
+  }
+}
