@@ -52,10 +52,10 @@ const Login = ({closeHandler}: LoginProps) => {
         type: 'success',
         message: `Bienvenido ${data.nombre}`
       }))
-    } catch (error) {
+    } catch (error: any) {
       dispatch(showToast({
         type: 'error',
-        message: 'Error al iniciar sesión'
+        message: error.response.data.message
       }))
     } finally {
       setLoading(false)
