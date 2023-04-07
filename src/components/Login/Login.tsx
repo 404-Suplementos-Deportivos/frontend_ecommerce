@@ -2,11 +2,10 @@ import { useState } from "react"
 import { Modal, Input, Row, Checkbox, Button, Text, FormElement, Loading } from "@nextui-org/react"
 import { UsuarioLogin } from "@/interfaces/UsuarioLogin"
 import { UsuarioLoginSchema } from "@/interfaces/UsuarioLogin"
-import { UsuarioAuth } from "@/interfaces/UsuarioAuth"
 import { useAppDispatch } from "@/hooks/useReduxStore"
-import { setUsuarioAuth } from "@/store/features/auth/authSlice"
+import { setToken, setUsuarioAuth} from "@/store/features/auth/authSlice"
 import { showToast } from "@/store/features/design/designSlice"
-import axios from '@/libs/axios'
+import { login, getProfile } from "@/services/users/authService"
 
 interface LoginProps {
   closeHandler: () => void
@@ -44,13 +43,19 @@ const Login = ({closeHandler}: LoginProps) => {
     if (!validateForm()) return
     try {
       setLoading(true)
-      const { data } = await axios.post<UsuarioAuth>('/auth/login', usuario)
+      const data  = await login(usuario)
       setUsuario(INITIAL_VALUES)
-      dispatch(setUsuarioAuth(data))
+
+      if(!data.token) throw new Error('No se pudo obtener el token')
+      dispatch(setToken(data.token))
+
+      const profile = await getProfile()
+      dispatch(setUsuarioAuth(profile))
+      
       closeHandler()
       dispatch(showToast({
         type: 'success',
-        message: `Bienvenido ${data.nombre}`
+        message: `Bienvenido ${profile.nombre}`
       }))
     } catch (error: any) {
       dispatch(showToast({

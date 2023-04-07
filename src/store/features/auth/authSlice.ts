@@ -16,25 +16,22 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: INITIAL_STATE,
   reducers: {
+    setToken: (state, action: PayloadAction<string>) => {
+      state.token = action.payload
+      localStorage.setItem('token', action.payload)
+    },
     setUsuarioAuth: (state, action: PayloadAction<UsuarioAuth>) => {
       state.usuario = action.payload
-      state.token = action.payload.token
-      localStorage.setItem('usuario', JSON.stringify(action.payload))
     },
     clearUsuarioAuth: (state) => {
       state.usuario = null
       state.token = ''
-      localStorage.removeItem('usuario')
+      localStorage.removeItem('token')
     }
   }
 });
 
-export const { setUsuarioAuth, clearUsuarioAuth } = authSlice.actions;
+export const { setToken, setUsuarioAuth, clearUsuarioAuth } = authSlice.actions;
 export default authSlice.reducer;
 
-export const setUsuarioAuthFromLocalStorage = () => (dispatch: any) => {
-  const usuario = localStorage.getItem('usuario')
-  if (usuario) {
-    dispatch(setUsuarioAuth(JSON.parse(usuario)))
-  }
-}
+export const getToken = (state: any) => state.auth.token

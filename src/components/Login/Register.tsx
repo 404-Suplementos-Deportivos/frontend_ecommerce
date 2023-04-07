@@ -3,7 +3,7 @@ import { Modal, Input, Row, Checkbox, Button, Text, FormElement, Loading } from 
 import { Usuario, UsuarioSchema, UsuarioType } from "@/interfaces/Usuario"
 import { useAppDispatch } from "@/hooks/useReduxStore"
 import { showToast } from "@/store/features/design/designSlice"
-import axios from '@/libs/axios'
+import { register } from "@/services/users/authService"
 
 interface RegisterProps {
   closeHandler: () => void
@@ -53,7 +53,7 @@ const Register = ({closeHandler}: RegisterProps) => {
     if (!validateForm()) return
     try {
       setLoading(true)
-      const { data } = await axios.post('/auth/register', usuario)
+      const data = await register(usuario)
       setUsuario(INITIAL_VALUES)
       closeHandler()
       dispatch(showToast({
@@ -70,6 +70,7 @@ const Register = ({closeHandler}: RegisterProps) => {
     }
   }
 
+  // TODO - Validacion en Tiempo Real al escribir
   const validateForm = (): boolean => {
     try {
       const validate = UsuarioSchema.parse(usuario)
