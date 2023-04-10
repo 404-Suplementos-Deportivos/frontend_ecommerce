@@ -22,3 +22,12 @@ export const register = async (usuario: Usuario) => {
   return data
 }
 
+export const confirmAccount = async (token: string) => {
+  const { data } = await axios.get(`/auth/confirm-account/${token}`)
+  return data
+}
+
+export const resetToken = async (email: string) => {
+  const { data } = await axios.post('/auth/confirm-account/reset', { email })
+  return data
+}
