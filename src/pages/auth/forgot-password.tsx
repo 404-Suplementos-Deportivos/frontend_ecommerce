@@ -6,48 +6,44 @@ import { useAppDispatch } from "@/hooks/useReduxStore"
 import { showToast } from "@/store/features/design/designSlice"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import { confirmAccount , resetToken} from "@/services/users/authService"
+import { resetPassword, validateToken, changePassword } from "@/services/users/authService"
 
-interface ConfirmAccountState {
-  error: boolean
+interface ForgotPasswordState {
   email: string
+  password: string
 }
 
-// TODO: Validar Email con mismo Schema que Usuario
+// TODO: Validar Password con mismo Schema que Usuario
 export default function ConfirmAccount() {
-  const [error, setError] = useState<ConfirmAccountState['error']>(false)
-  const [email, setEmail] = useState<ConfirmAccountState['email']>('')
+  const [email, setEmail] = useState<ForgotPasswordState['email']>('')
+  const [password, setPassword] = useState<ForgotPasswordState['password']>('')
   const dispatch = useAppDispatch()
   const router = useRouter()
   const { token } = router.query
 
   useEffect(() => {
     if (token) {
-      const confirmAccountData = async () => {
+      const validateTokenData = async () => {
         try {
-          const data = await confirmAccount(token as string)
+          const data = await validateToken(token as string)
           dispatch(showToast({
             type: 'success',
             message: data.message
           }))
-          setTimeout(() => {
-            router.push('/')
-          }, 2500);
         } catch (error: any) {
           dispatch(showToast({
             type: 'error',
             message: error.response.data.message
           }))
-          setError(true)
         }
       }
-      confirmAccountData()
+      validateTokenData()
     }
   }, [token, dispatch, router])
 
-  const reenviarCorreo = async () => {
+  const enviarCorreo = async () => {
     try {
-      const data = await resetToken(email)
+      const data = await resetPassword(email)
       dispatch(showToast({
         type: 'success',
         message: data.message
@@ -65,10 +61,30 @@ export default function ConfirmAccount() {
     }
   }
 
+  const cambiarPassword = async () => {
+    try {
+      const data = await changePassword(token as string, password)
+      dispatch(showToast({
+        type: 'success',
+        message: data.message
+      }))
+      setTimeout(() => {
+        router.push('/')
+      }, 2500);
+    } catch (error: any) {
+      dispatch(showToast({
+        type: 'error',
+        message: error.response.data.message
+      }))
+    } finally {
+      setPassword('')
+    }
+  }
+
   return (
     <>
       <Head>
-        <title>404 Suplementos Deportivos | Confirmar Cuenta</title>
+        <title>404 Suplementos Deportivos | Recuperar Contraseña</title>
         <meta name="description" content='Tienda online de suplementos deportivos e insumos de gimnasio con una amplia variedad de productos de alta calidad para ayudarte a alcanzar tus objetivos fitness. Contamos con las marcas más reconocidas del mercado, brindando a nuestros clientes confianza y seguridad en cada compra.' />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/404_Icono_White.ico" />
@@ -76,11 +92,10 @@ export default function ConfirmAccount() {
 
       <div className="flex flex-col items-center justify-center h-screen">
         <h2 className="logo inverted">404</h2>
-        <h1 className="text-4xl font-bold text-gray-800">Confirmar Cuenta</h1>
-        <p>Si su cuenta fue confirmada, será redirigido a la página principal.</p>
-        {error && (
-          <div className="mt-2 flex flex-col items-center justify-center gap-2">
-            <p className="text-rojo text-xl font-bold">Hubo un error al confirmar su cuenta.</p>
+        <h1 className="text-4xl font-bold text-gray-800">Recuperar Contraseña</h1>
+        <p>Ingrese su correo electrónico para recuperar su contraseña</p>
+        <div className="mt-2 flex flex-col items-center justify-center gap-2">
+          {!token ? (
             <div className="flex flex-row gap-4">
               <input 
                 type="text" 
@@ -89,11 +104,22 @@ export default function ConfirmAccount() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}  
               />
-              <button onClick={reenviarCorreo} className="btn btn-primary bg-verde text-blanco p-2">Reenviar correo</button>
+              <button onClick={enviarCorreo} className="btn btn-primary bg-verde text-blanco p-2">Enviar correo</button>
             </div>
-            <Link href="/" className="text-verde text-xl font-bold">Volver a la página principal</Link>
-          </div>
-        )}
+          ) : (
+            <div className="flex flex-row gap-4">
+              <input 
+                type="password" 
+                className="border border-grisMedio px-2" 
+                placeholder="Tu nueva contraseña" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}  
+              />
+              <button onClick={cambiarPassword} className="btn btn-primary bg-verde text-blanco p-2">Cambiar contraseña</button>
+            </div>
+          )}
+          <Link href="/" className="text-verde text-xl font-bold">Volver a la página principal</Link>
+        </div>
       </div>
       <ToastContainer
         pauseOnHover

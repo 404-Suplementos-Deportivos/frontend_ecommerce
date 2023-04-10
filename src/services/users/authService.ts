@@ -31,3 +31,18 @@ export const resetToken = async (email: string) => {
   const { data } = await axios.post('/auth/confirm-account/reset', { email })
   return data
 }
+
+export const resetPassword = async (email: string) => {
+  const { data } = await axios.post('/auth/forgot-password', { email })
+  return data
+}
+
+export const validateToken = async (token: string) => {
+  const { data } = await axios.get(`/auth/reset/${token}`)
+  return data
+}
+
+export const changePassword = async (token: string, password: string) => {
+  const { data } = await axios.put(`/auth/reset/${token}`, { password })
+  return data
+}

@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/hooks/useReduxStore"
 import { setToken, setUsuarioAuth} from "@/store/features/auth/authSlice"
 import { showToast } from "@/store/features/design/designSlice"
 import { login, getProfile } from "@/services/users/authService"
+import Link from "next/link"
 
 interface LoginProps {
   closeHandler: () => void
@@ -128,7 +129,9 @@ const Login = ({closeHandler}: LoginProps) => {
           <Checkbox>
             <Text size={14}>Recuerdame</Text>
           </Checkbox>
-          <Text size={14}>Olvidaste tu clave?</Text>
+          <Link href="/auth/forgot-password">
+            <Text size={14}>Olvidaste tu clave?</Text>
+          </Link>
         </Row>
       </div>
       <Modal.Footer className="flex flex-col w-full">
