@@ -20,6 +20,7 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
   const userAuth = useAppSelector(state => state.auth.usuario)
   const dispatch = useAppDispatch()
 
+  // TODO: Solucionar el problema de que el navbar no haga salto cuando se hace scroll hacia arriba
   return (
     <header className={`z-50 bg-grisOscuro static ${!isAtTop && 'fixed top-0 left-0 right-0'}`}>
       <div className='flex flex-row justify-between items-center mx-auto py-4 w-5/6 text-blanco'>
@@ -29,7 +30,9 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
           ) : (
             <Bars3Icon className='h-6 w-6 cursor-pointer' onClick={() => dispatch(toggleNavbar(true))}   />
           )}
-          <h3 className='logo'>404</h3>
+          <Link href='/'>
+            <h3 className='logo'>404</h3>
+          </Link>
         </div>
 
         <div className='w-8/12 relative'>
@@ -52,7 +55,7 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
                   </Popover.Trigger>
                   <Popover.Content className='bg-blanco rounded-lg shadow-md'>
                     <div className='flex flex-col gap-2 p-2'>
-                      <Link href={'/mi-cuenta'} className='text-negro hover:text-blanco hover:bg-verde py-2 px-4 rounded-md'>
+                      <Link href={`/account/${userAuth.id}`} className='text-negro hover:text-blanco hover:bg-verde py-2 px-4 rounded-md'>
                         Mi Cuenta
                       </Link>
                       <button 

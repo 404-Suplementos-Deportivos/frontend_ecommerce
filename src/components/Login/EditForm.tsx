@@ -1,19 +1,16 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import { Modal, Input, Row, Checkbox, Button, Text, FormElement, Loading } from "@nextui-org/react"
 import { Usuario, UsuarioSchema, UsuarioType } from "@/interfaces/Usuario"
 import { useAppDispatch } from "@/hooks/useReduxStore"
 import { showToast } from "@/store/features/design/designSlice"
-import { register } from "@/services/users/authService"
+import { getUser } from "@/services/users/usersService"
 
-interface RegisterProps {
-  closeHandler: () => void
-}
-
-interface RegisterState {
+interface EditFormState {
   usuario: Usuario
   loading: boolean
-  passwordConfirm: string
   formErrors: ErrorForm[]
+  editar: boolean
 }
 
 type ErrorForm = {
@@ -33,12 +30,41 @@ const INITIAL_VALUES: Usuario = {
   fechaNacimiento: null
 }
 
-const Register = ({closeHandler}: RegisterProps) => {
+const EditForm = () => {
   const dispatch = useAppDispatch()
-  const [usuario, setUsuario] = useState<RegisterState['usuario']>(INITIAL_VALUES)
-  const [passwordConfirm, setPasswordConfirm] = useState<RegisterState['passwordConfirm']>('')
-  const [formErrors, setFormErrors] = useState<RegisterState['formErrors']>([{}]);
-  const [loading, setLoading] = useState<RegisterState['loading']>(false)
+  const router = useRouter()
+  const [usuario, setUsuario] = useState<EditFormState['usuario']>(INITIAL_VALUES)
+  const [formErrors, setFormErrors] = useState<EditFormState['formErrors']>([{}]);
+  const [loading, setLoading] = useState<EditFormState['loading']>(false)
+  const [paginaLista, setPaginaLista] = useState(false)
+  const [editar, setEditar] = useState(false)
+
+  const { id } = router.query
+
+  // TODO: - Solucionar el problema de Hidratacion de React
+  useEffect(() => {
+    setPaginaLista(true)
+    if (id) {
+      const cargarUsuario = async () => {
+        try {
+          setLoading(true)
+          const data = await getUser(id as string)
+          console.log( data )
+          setUsuario(data)
+        } catch (error: any) {
+          dispatch(showToast({
+            type: 'error',
+            message: error.response.data.message
+          }))
+        } finally {
+          setLoading(false)
+        }
+      }
+      cargarUsuario()
+    }
+  }, [id, dispatch])
+
+ 
 
   const handleChange = (e: InputChange) => {
     const { name, value } = e.target
@@ -53,13 +79,12 @@ const Register = ({closeHandler}: RegisterProps) => {
     if (!validateForm()) return
     try {
       setLoading(true)
-      const data = await register(usuario)
+      // const data = await register(usuario)
       setUsuario(INITIAL_VALUES)
-      closeHandler()
-      dispatch(showToast({
-        type: 'success',
-        message: data.message
-      }))
+      // dispatch(showToast({
+      //   type: 'success',
+      //   message: data.message
+      // }))
     } catch (error: any) {
       dispatch(showToast({
         type: 'error',
@@ -70,16 +95,10 @@ const Register = ({closeHandler}: RegisterProps) => {
     }
   }
 
-  // TODO - Validacion en Tiempo Real al escribir
+  // TODO: - Validacion en Tiempo Real al escribir
   const validateForm = (): boolean => {
     try {
       const validate = UsuarioSchema.parse(usuario)
-      if (validate.password !== passwordConfirm || passwordConfirm === '') {
-        setFormErrors([{ passwordConfirm: 'Las contraseñas no coinciden' }])
-        return false
-      } else {
-        setFormErrors([{}])
-      }
       return true
     } catch (error: any) {
       const errores: ErrorForm[] = error.errors
@@ -103,15 +122,21 @@ const Register = ({closeHandler}: RegisterProps) => {
   };
 
   return (
-    <>
-      <div className="max-h-[400px] overflow-y-auto overflow-x-hidden">
+    paginaLista ? (
+      <div className="w-3/4 z-20 flex flex-col">
+        <div className="w-full flex justify-end">
+        <Checkbox color="success" size="sm" onChange={() => setEditar(!editar)}>
+          Editar datos
+        </Checkbox>
+        </div>
         <div className="mt-6">
           <Input
             type="text"
             labelPlaceholder="Tu nombre" 
             fullWidth
             underlined
-            clearable
+            clearable={editar}
+            disabled={!editar}
             color="success"
             name="nombre"
             value={usuario.nombre}
@@ -125,7 +150,8 @@ const Register = ({closeHandler}: RegisterProps) => {
             labelPlaceholder="Tu apellido" 
             fullWidth
             underlined
-            clearable
+            clearable={editar}
+            disabled={!editar}
             color="success"
             name="apellido"
             value={usuario.apellido}
@@ -139,7 +165,8 @@ const Register = ({closeHandler}: RegisterProps) => {
             labelPlaceholder="Tu e-mail" 
             fullWidth
             underlined
-            clearable
+            clearable={editar}
+            disabled={!editar}
             color="success"
             name="email"
             value={usuario.email}
@@ -149,39 +176,12 @@ const Register = ({closeHandler}: RegisterProps) => {
           />
         </div>
         <div className="mt-12">
-          <Input.Password
-            labelPlaceholder="Utiliza una clave compleja" 
-            fullWidth
-            underlined
-            clearable
-            color="success"
-            name="password"
-            value={usuario.password}
-            onChange={handleChange}
-            helperText={findErrorMessage('password')}
-            helperColor={findErrorMessage('password') ? 'error' : 'success'}
-          />
-        </div>
-        <div className="mt-12">
-          <Input.Password
-            labelPlaceholder="Repite tu clave" 
-            fullWidth
-            underlined
-            clearable
-            color="success"
-            name="passwordConfirm"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-            helperText={findErrorMessage('passwordConfirm')}
-            helperColor={findErrorMessage('passwordConfirm') ? 'error' : 'success'}
-          />
-        </div>
-        <div className="mt-12">
           <Input
             labelPlaceholder="Direccion" 
             fullWidth
             underlined
-            clearable
+            clearable={editar}
+            disabled={!editar}
             color="success"
             placeholder="Calle, Nro, Piso, Depto, Barrio"
             name="direccion"
@@ -191,13 +191,14 @@ const Register = ({closeHandler}: RegisterProps) => {
             helperColor={findErrorMessage('direccion') ? 'error' : 'success'}
           />
         </div>
-        <div className="mt-12">
+        <div className="mt-6">
           <Input
             type="number"
             label="Codigo Postal" 
             fullWidth
             underlined
-            clearable
+            clearable={editar}
+            disabled={!editar}
             color="success"
             min={1000}
             name="codigoPostal"
@@ -212,7 +213,8 @@ const Register = ({closeHandler}: RegisterProps) => {
             labelPlaceholder="Telefono" 
             fullWidth
             underlined
-            clearable
+            clearable={editar}
+            disabled={!editar}
             color="success"
             name="telefono"
             value={usuario.telefono ? usuario.telefono : ''}
@@ -221,12 +223,13 @@ const Register = ({closeHandler}: RegisterProps) => {
             helperColor={findErrorMessage('telefono') ? 'error' : 'success'}
           />
         </div>
-        <div className="mt-12">
+        <div className="mt-6">
           <Input
             label="Fecha de Nacimiento" 
             fullWidth
             underlined
-            clearable
+            clearable={editar}
+            disabled={!editar}
             type="date" 
             color="success"
             name="fechaNacimiento"
@@ -236,20 +239,14 @@ const Register = ({closeHandler}: RegisterProps) => {
             helperColor={findErrorMessage('fechaNacimiento') ? 'error' : 'success'}
           />
         </div>
-      </div>
-      <Modal.Footer className="flex flex-col w-full">
-        {loading && <Loading className="my-2" type="gradient" color="success" />}
-        <div className="self-end flex flex-row gap-2">
-          <Button auto flat onPress={closeHandler} className='bg-rojo/90 text-blanco'>
-            Cerrar
-          </Button>
-          <Button auto flat onPress={handleSubmit} className='bg-verde/90 text-blanco'>
-            Registrarme
+        <div className="w-full flex justify-end">
+          <Button onPress={handleSubmit} className='w-2/5 bg-verde/90 text-blanco mt-4'>
+            Guardar Cambios
           </Button>
         </div>
-      </Modal.Footer>
-    </>
-  )
+      </div>
+    ) : null
+  ) 
 }
 
-export default Register
+export default EditForm

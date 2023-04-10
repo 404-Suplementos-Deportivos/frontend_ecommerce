@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import CartMenu from './Navbar/CartMenu'
 import SearchBar from './Navbar/SearchBar'
 import SearchList from './Navbar/SearchList'
@@ -29,7 +30,9 @@ const HeaderMobile = ({isAtTop}: HeaderMobileProps) => {
             )}
           </div>
           <div>
-            <h3 className='logo'>404</h3>
+            <Link href='/'>
+              <h3 className='logo'>404</h3>
+            </Link>
           </div>
           <div className='flex flex-row items-center gap-6'>
             <p className='hover:text-verde transition-colors ease-in-out cursor-pointer'>

@@ -3,7 +3,7 @@ import Link from "next/link"
 import { ChevronDownIcon, UserIcon } from '@heroicons/react/24/outline'
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { clearUsuarioAuth } from "@/store/features/auth/authSlice"
-import { toggleModalLogin } from "@/store/features/design/designSlice"
+import { toggleModalLogin, toggleNavbar } from "@/store/features/design/designSlice"
 
 interface NavbarMobileState {
   isSubMenuItemOpen: boolean
@@ -56,7 +56,7 @@ const NavbarMobile = () => {
             <UserIcon className="h-6 w-6" />
             {userAuth ? (
               <>
-                <Link href={'/mi-cuenta'}>Mi Cuenta: {userAuth.email}</Link>
+                <Link href={`/account/${userAuth.id}`} onClick={() => dispatch(toggleNavbar(false))}>Mi Cuenta: {userAuth.email}</Link>
                 {' | '}
                 <button onClick={() => dispatch(clearUsuarioAuth())}>Cerrar Sesion</button>
               </>

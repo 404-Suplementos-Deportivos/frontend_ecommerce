@@ -129,7 +129,7 @@ const Login = ({closeHandler}: LoginProps) => {
           <Checkbox>
             <Text size={14}>Recuerdame</Text>
           </Checkbox>
-          <Link href="/auth/forgot-password">
+          <Link href="/account/forgot-password">
             <Text size={14}>Olvidaste tu clave?</Text>
           </Link>
         </Row>
