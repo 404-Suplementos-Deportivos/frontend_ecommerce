@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { Input } from "@nextui-org/react"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from 'next/router'
@@ -7,16 +8,23 @@ import { showToast } from "@/store/features/design/designSlice"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { resetPassword, validateToken, changePassword } from "@/services/users/authService"
+import { Password, PasswordSchema } from "@/interfaces/Password"
 
 interface ForgotPasswordState {
   email: string
   password: string
+  formErrors: ErrorForm[]
+}
+
+type ErrorForm = {
+  [key: string]: string
 }
 
 // TODO: Validar Password con mismo Schema que Usuario
 export default function ConfirmAccount() {
   const [email, setEmail] = useState<ForgotPasswordState['email']>('')
   const [password, setPassword] = useState<ForgotPasswordState['password']>('')
+  const [formErrors, setFormErrors] = useState<ForgotPasswordState['formErrors']>([{}])
   const dispatch = useAppDispatch()
   const router = useRouter()
   const { token } = router.query
@@ -63,6 +71,7 @@ export default function ConfirmAccount() {
 
   const cambiarPassword = async () => {
     try {
+      if(!validateForm()) return
       const data = await changePassword(token as string, password)
       dispatch(showToast({
         type: 'success',
@@ -79,6 +88,33 @@ export default function ConfirmAccount() {
     } finally {
       setPassword('')
     }
+  }
+
+  const validateForm = (): boolean => {
+    const passwordData: Password = {
+      password
+    }
+    try {
+      const validate = PasswordSchema.parse(passwordData)
+      return true
+    } catch (error: any) {
+      const errores: ErrorForm[] = error.errors
+      const FormPaths = errores.map((error: ErrorForm) => {
+        const { path, message } = error
+        return { [path]: message }
+      })
+      setFormErrors(FormPaths)
+      return false
+    }
+  }
+
+  const findErrorMessage = (fieldName: string): string => {
+    const error = formErrors.find((error: ErrorForm) => error[fieldName] )
+    if (error) {
+      const errorMessage: string = Object.values(error)[0] as string
+      return errorMessage;
+    }
+    return ''
   }
 
   return (
@@ -108,17 +144,19 @@ export default function ConfirmAccount() {
             </div>
           ) : (
             <div className="flex flex-row gap-4">
-              <input 
-                type="password" 
-                className="border border-grisMedio px-2" 
-                placeholder="Tu nueva contraseña" 
+              <Input.Password
+                placeholder="Tu nueva contraseña"
+                id="password"
+                name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}  
+                helperText={findErrorMessage('password')}
+                helperColor={findErrorMessage('password') ? 'error' : 'success'}
               />
               <button onClick={cambiarPassword} className="btn btn-primary bg-verde text-blanco p-2">Cambiar contraseña</button>
             </div>
           )}
-          <Link href="/" className="text-verde text-xl font-bold">Volver a la página principal</Link>
+          <Link href="/" className="text-verde text-xl font-bold mt-2">Volver a la página principal</Link>
         </div>
       </div>
       <ToastContainer
