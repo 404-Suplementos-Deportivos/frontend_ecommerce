@@ -7,19 +7,19 @@ interface LoginResponse {
   token: string;
 }
 
-export const login = async (usuario: UsuarioLogin) => {
+export const login = async (usuario: UsuarioLogin): Promise<LoginResponse> => {
   const { data } =  await axios.post<LoginResponse>('/auth/login', usuario)
   return data
 }
 
-export const getProfile = async () => {
+export const getProfile = async (): Promise<UsuarioAuth> => {
   const { data } = await axios.get<UsuarioAuth>('/auth/profile')
   return data
 }
 
 export const register = async (usuario: Usuario) => {
   const { data } = await axios.post('/auth/register', usuario)
-  return data
+  return data // return data.message:{message: 'Usuario registrado correctamente'} o error.response.data.message del catch
 }
 
 export const confirmAccount = async (token: string) => {

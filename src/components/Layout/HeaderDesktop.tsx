@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import Navbar from './Navbar/Navbar'
 import CartMenu from './Navbar/CartMenu'
 import SearchBar from './Navbar/SearchBar'
@@ -19,10 +20,11 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
   const isCartMenuOpen = useAppSelector(state => state.design.isCartToggled)
   const userAuth = useAppSelector(state => state.auth.usuario)
   const dispatch = useAppDispatch()
+  const router = useRouter()
 
   // TODO: Solucionar el problema de que el navbar no haga salto cuando se hace scroll hacia arriba
   return (
-    <header className={`z-50 bg-grisOscuro static ${!isAtTop && 'fixed top-0 left-0 right-0'}`}>
+    <header className={`z-[200] bg-grisOscuro static ${!isAtTop && 'fixed top-0 left-0 right-0'}`}>
       <div className='flex flex-row justify-between items-center mx-auto py-4 w-5/6 text-blanco'>
         <div className='flex flex-row items-center gap-4' >
           {isNavbarOpen ? (
@@ -55,12 +57,15 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
                   </Popover.Trigger>
                   <Popover.Content className='bg-blanco rounded-lg shadow-md'>
                     <div className='flex flex-col gap-2 p-2'>
-                      <Link href={`/account/${userAuth.id}`} className='text-negro hover:text-blanco hover:bg-verde py-2 px-4 rounded-md'>
+                      <Link href={`/account/${userAuth.id}?view=profile`} className='text-negro hover:text-blanco hover:bg-verde py-2 px-4 rounded-md'>
                         Mi Cuenta
                       </Link>
                       <button 
                         className='text-negro hover:text-blanco hover:bg-rojo py-2 px-4 rounded-md transition-colors ease-in-out duration-300'
-                        onClick={() => dispatch(clearUsuarioAuth())}
+                        onClick={() => {
+                          dispatch(clearUsuarioAuth())
+                          router.push('/')
+                        }}
                       >
                         Cerrar Sesión
                       </button>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
 import { Modal, Input, Row, Checkbox, Button, Text, FormElement, Loading } from "@nextui-org/react"
-import { Usuario, UsuarioSchema, UsuarioType } from "@/interfaces/Usuario"
-import { useAppDispatch } from "@/hooks/useReduxStore"
+import { Usuario, UsuarioEditSchema } from "@/interfaces/Usuario"
+import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
+import { updateUserAsync } from "@/store/features/user/userSlice"
+import { clearUserError } from "@/store/features/user/userSlice"
 import { showToast } from "@/store/features/design/designSlice"
-import { getUser } from "@/services/users/usersService"
 
 interface EditFormState {
   usuario: Usuario
@@ -32,39 +32,33 @@ const INITIAL_VALUES: Usuario = {
 
 const EditForm = () => {
   const dispatch = useAppDispatch()
-  const router = useRouter()
   const [usuario, setUsuario] = useState<EditFormState['usuario']>(INITIAL_VALUES)
+  const { usuario: user, error, loading } = useAppSelector(state => state.user)
   const [formErrors, setFormErrors] = useState<EditFormState['formErrors']>([{}]);
-  const [loading, setLoading] = useState<EditFormState['loading']>(false)
   const [paginaLista, setPaginaLista] = useState(false)
   const [editar, setEditar] = useState(false)
 
-  const { id } = router.query
-
   // TODO: - Solucionar el problema de Hidratacion de React
   useEffect(() => {
-    setPaginaLista(true)
-    if (id) {
-      const cargarUsuario = async () => {
-        try {
-          setLoading(true)
-          const data = await getUser(id as string)
-          console.log( data )
-          setUsuario(data)
-        } catch (error: any) {
-          dispatch(showToast({
-            type: 'error',
-            message: error.response.data.message
-          }))
-        } finally {
-          setLoading(false)
-        }
-      }
-      cargarUsuario()
+    if (user) {
+      setUsuario(user)
+      setPaginaLista(true)
     }
-  }, [id, dispatch])
+    setPaginaLista(true)
+  }, [user])
 
- 
+  // TODO: - Solucionar el problema Toast Error doble al actualizar - Doble Render React
+  useEffect(() => {
+    if (error.type === 'error') {
+      dispatch(showToast(error))
+      dispatch(clearUserError())
+    }
+    if (error.type === 'success') {
+      setEditar(false)
+      dispatch(showToast(error))
+      dispatch(clearUserError())
+    }
+  }, [error, dispatch]);
 
   const handleChange = (e: InputChange) => {
     const { name, value } = e.target
@@ -77,28 +71,13 @@ const EditForm = () => {
 
   const handleSubmit = async () => {
     if (!validateForm()) return
-    try {
-      setLoading(true)
-      // const data = await register(usuario)
-      setUsuario(INITIAL_VALUES)
-      // dispatch(showToast({
-      //   type: 'success',
-      //   message: data.message
-      // }))
-    } catch (error: any) {
-      dispatch(showToast({
-        type: 'error',
-        message: error.response.data.message
-      }))
-    } finally {
-      setLoading(false)
-    }
+    dispatch(updateUserAsync(usuario))
   }
 
   // TODO: - Validacion en Tiempo Real al escribir
   const validateForm = (): boolean => {
     try {
-      const validate = UsuarioSchema.parse(usuario)
+      const validate = UsuarioEditSchema.parse(usuario)
       return true
     } catch (error: any) {
       const errores: ErrorForm[] = error.errors
@@ -107,6 +86,7 @@ const EditForm = () => {
         return { [path]: message }
       })
       setFormErrors(FormPaths)
+      console.log( errores )
       return false
     }
   }
@@ -121,11 +101,12 @@ const EditForm = () => {
     }
   };
 
+  // TODO: - Solucionar el problema de "Not recognize the `isSelected` prop on a DOM element."
   return (
     paginaLista ? (
-      <div className="w-3/4 z-20 flex flex-col">
+      <div className="md:w-3/4 z-20 flex flex-col">
         <div className="w-full flex justify-end">
-        <Checkbox color="success" size="sm" onChange={() => setEditar(!editar)}>
+        <Checkbox color="success" size="sm" onChange={() => setEditar(!editar)} isSelected={editar}>
           Editar datos
         </Checkbox>
         </div>
@@ -202,7 +183,7 @@ const EditForm = () => {
             color="success"
             min={1000}
             name="codigoPostal"
-            value={Number(usuario.codigoPostal)}
+            value={usuario.codigoPostal ? Number(usuario.codigoPostal) : ''}
             onChange={handleChange}
             helperText={findErrorMessage('codigoPostal')}
             helperColor={findErrorMessage('codigoPostal') ? 'error' : 'success'}
@@ -228,7 +209,6 @@ const EditForm = () => {
             label="Fecha de Nacimiento" 
             fullWidth
             underlined
-            clearable={editar}
             disabled={!editar}
             type="date" 
             color="success"
@@ -240,7 +220,12 @@ const EditForm = () => {
           />
         </div>
         <div className="w-full flex justify-end">
-          <Button onPress={handleSubmit} className='w-2/5 bg-verde/90 text-blanco mt-4'>
+          <Button 
+            onPress={handleSubmit} 
+            disabled={!editar}
+            className='w-2/5 bg-verde/90 text-blanco mt-4'
+            style={{ cursor: !editar ? 'not-allowed' : 'pointer', opacity: !editar ? 0.5 : 1 }}
+          >
             Guardar Cambios
           </Button>
         </div>

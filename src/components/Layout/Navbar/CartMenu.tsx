@@ -10,7 +10,7 @@ const CartMenu = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <div className={`fixed md:right-0 z-20  transform transition-transform ease-in-out duration-300 ${isCartMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
+    <div className={`fixed md:right-0 z-[200]  transform transition-transform ease-in-out duration-300 ${isCartMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
       <div className='bg-grisClaro text-negro h-fit w-full md:h-[600px] md:w-[400px] flex flex-col justify-between'>
         <div>
           <div className="flex flex-row justify-between bg-grisMuyClaro p-4">

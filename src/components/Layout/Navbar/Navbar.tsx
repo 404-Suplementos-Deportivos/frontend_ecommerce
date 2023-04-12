@@ -22,7 +22,7 @@ const Navbar = () => {
   return (
     <>
       {/* {isNavbarOpen && ( */}
-      <div className={`flex flex-row fixed z-20 transform transition-all ease-in-out duration-300 ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"} `}
+      <div className={`flex flex-row fixed z-[200] transform transition-all ease-in-out duration-300 ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"} `}
         onMouseLeave={handleSubMenuItemLeave}
       >
         <nav className='bg-grisMedio h-screen w-[300px]'>
