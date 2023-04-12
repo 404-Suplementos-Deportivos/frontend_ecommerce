@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import { ChevronDownIcon, UserIcon } from '@heroicons/react/24/outline'
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { clearUsuarioAuth } from "@/store/features/auth/authSlice"
@@ -14,6 +15,7 @@ const NavbarMobile = () => {
   const userAuth = useAppSelector(state => state.auth.usuario)
   const [isSubMenuItemOpen, setIsSubMenuItemOpen] = useState<NavbarMobileState['isSubMenuItemOpen']>(false)
   const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const handleChangeSubMenu = () => {
     setIsSubMenuItemOpen(!isSubMenuItemOpen)
@@ -21,7 +23,7 @@ const NavbarMobile = () => {
 
   return (
     <>
-      <div className={`bg-grisMedio overflow-y-auto fixed h-[600px] w-screen z-[100] transform transition-all ease-in-out duration-300 ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"}`}
+      <div className={`bg-grisMedio overflow-y-auto fixed h-[600px] w-screen z-[200] transform transition-all ease-in-out duration-300 ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <nav className="h-full flex flex-col justify-between">
           <div>
@@ -56,9 +58,12 @@ const NavbarMobile = () => {
             <UserIcon className="h-6 w-6" />
             {userAuth ? (
               <>
-                <Link href={`/account/${userAuth.id}`} onClick={() => dispatch(toggleNavbar(false))}>Mi Cuenta: {userAuth.email}</Link>
+                <Link href={`/account/${userAuth.id}?view=profile`} onClick={() => dispatch(toggleNavbar(false))}>Mi Cuenta: {userAuth.email}</Link>
                 {' | '}
-                <button onClick={() => dispatch(clearUsuarioAuth())}>Cerrar Sesion</button>
+                <button onClick={() => {
+                  dispatch(clearUsuarioAuth())
+                  router.push('/')
+                }}>Cerrar Sesion</button>
               </>
             ) : (
               <p 

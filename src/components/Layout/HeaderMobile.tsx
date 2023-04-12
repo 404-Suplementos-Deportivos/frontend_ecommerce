@@ -19,7 +19,7 @@ const HeaderMobile = ({isAtTop}: HeaderMobileProps) => {
   const dispatch = useAppDispatch()
 
   return (
-    <header className={`z-50 bg-grisOscuro ${!isAtTop && 'fixed top-0 left-0 right-0'}`}>
+    <header className={`z-[200] bg-grisOscuro ${!isAtTop && 'fixed top-0 left-0 right-0'}`}>
       <div className='mx-auto w-5/6 py-4'>
         <div className='flex flex-row justify-between items-center text-blanco'>
           <div className='flex flex-row items-center gap-4'>
