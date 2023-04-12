@@ -8,7 +8,7 @@ import { showToast } from "@/store/features/design/designSlice"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { resetPassword, validateToken, changePassword } from "@/services/users/authService"
-import { Password, PasswordSchema } from "@/interfaces/Password"
+import { ForgotUser, ForgotUserSchema } from "@/interfaces/ForgotUser"
 
 interface ForgotPasswordState {
   email: string
@@ -51,6 +51,7 @@ export default function ConfirmAccount() {
 
   const enviarCorreo = async () => {
     try {
+      if(!validateForm('email')) return
       const data = await resetPassword(email)
       dispatch(showToast({
         type: 'success',
@@ -71,7 +72,7 @@ export default function ConfirmAccount() {
 
   const cambiarPassword = async () => {
     try {
-      if(!validateForm()) return
+      if(!validateForm('password')) return
       const data = await changePassword(token as string, password)
       dispatch(showToast({
         type: 'success',
@@ -90,12 +91,19 @@ export default function ConfirmAccount() {
     }
   }
 
-  const validateForm = (): boolean => {
-    const passwordData: Password = {
-      password
+  const validateForm = (action: string): boolean => {
+    let userData: ForgotUser
+    if (action === 'email') {
+      userData = {
+        email
+      }
+    } else {
+      userData = {
+        password
+      }
     }
     try {
-      const validate = PasswordSchema.parse(passwordData)
+      const validate = ForgotUserSchema.parse(userData)
       return true
     } catch (error: any) {
       const errores: ErrorForm[] = error.errors
@@ -133,12 +141,15 @@ export default function ConfirmAccount() {
         <div className="mt-2 flex flex-col items-center justify-center gap-2">
           {!token ? (
             <div className="flex flex-row gap-4">
-              <input 
-                type="text" 
-                className="border border-grisMedio px-2" 
+              <Input 
+                type="email" 
                 placeholder="Correo electrónico" 
+                id="email"
+                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}  
+                helperText={findErrorMessage('email')}
+                helperColor={findErrorMessage('email') ? 'error' : 'success'}
               />
               <button onClick={enviarCorreo} className="btn btn-primary bg-verde text-blanco p-2">Enviar correo</button>
             </div>
