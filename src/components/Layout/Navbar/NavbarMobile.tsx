@@ -30,7 +30,7 @@ const NavbarMobile = () => {
             <div 
               className="flex justify-between items-center text-blanco p-4 border-b border-b-grisClaro hover:bg-grisClaro transition-colors ease-in-out"
             >
-              <Link href="/productos">Productos</Link>
+              <Link href="/products">Productos</Link>
               <ChevronDownIcon className="h-6 w-6" onClick={handleChangeSubMenu} />
             </div>
             {isSubMenuItemOpen && (

@@ -31,14 +31,14 @@ const Navbar = () => {
               className="flex justify-between items-center text-blanco p-4 border-b border-b-grisClaro hover:bg-grisClaro transition-colors ease-in-out"
               onMouseEnter={handleSubMenuItemEnter}
             >
-              <Link href="/productos">Productos</Link>
+              <Link href="/products">Productos</Link>
               <ChevronRightIcon className="h-6 w-6" />
             </div>
             <div 
               className="flex justify-between items-center text-blanco p-4 border-b border-b-grisClaro hover:bg-grisClaro transition-colors ease-in-out"
               onMouseEnter={handleSubMenuItemEnter}
             >
-              <Link href="/productos">Ropa</Link>
+              <Link href="/products">Ropa</Link>
               <ChevronRightIcon className="h-6 w-6" />
             </div>
           </div>
