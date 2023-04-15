@@ -3,7 +3,7 @@ import { Producto } from "@/interfaces/Producto"
 import { getProducts } from "@/services/products/productsService"
 import Layout from "@/components/Layout/Layout"
 import List from "@/components/Products/List"
-import Card from "@/components/Products/Card"
+import Filters from "@/components/Products/Filters"
 
 export default function Products() {
   const [productos, setProductos] = useState<Producto[]>([])
@@ -25,9 +25,9 @@ export default function Products() {
       title="Productos"
     >
       <div className="md:mx-auto md:w-5/6">
-        <h3>Nuestro Productos</h3>
+        <h3 className="text-2xl font-bold text-grisOscuro my-5">Nuestros productos</h3>
         <div>
-          Filtros
+          <Filters />
         </div>
         <List productos={productos} />
       </div>

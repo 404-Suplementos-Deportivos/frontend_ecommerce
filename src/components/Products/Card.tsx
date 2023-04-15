@@ -7,23 +7,19 @@ interface CardProps {
 }
 
 const Card = ({producto}: CardProps) => {
-  const { nombre, descripcion, precioLista, urlImagen, estado } = producto
+  const { nombre, precioLista, urlImagen } = producto
 
   return (
-    <div className="bg-blanco rounded-md shadow-md flex flex-col">
-      <div className="h-48 w-full">
-        <Image src={urlImagen} className="rounded-md object-fill" alt="Imagen del producto" width={300} height={300} />
+    <Link href={`/products/${nombre}`} className="bg-blanco rounded-md shadow-md h-[300px] relative">
+      <div className="w-full h-full absolute top-0 left-0 bg-gradient-to-b from-blanco/0 to-grisOscuro opacity-0 hover:opacity-70 transition-all duration-300 ease-in-out"></div>
+      <div className="w-full h-full">
+        <Image src={urlImagen} alt={nombre} width={300} height={300} className="w-full h-full object-cover" />
       </div>
-      <div className="p-4">
-        <h3 className="text-lg font-semibold">{nombre}</h3>
-        <p className="text-sm text-gray-500">{descripcion}</p>
-        <p className="text-sm text-gray-500">{estado}</p>
-        <p className="text-sm text-gray-500">${precioLista}</p>
-        <Link href={`/products/${producto.id}`} className="block w-full text-center bg-gray-800 text-white rounded-md py-2 mt-4">
-          Ver más
-        </Link>
+      <div className="w-full h-[200] p-2 flex flex-row justify-between items-end absolute left-0 right-0 bottom-0">
+        <p className="text-sm text-grisMuyClaro font-bold w-3/5">{nombre}</p>
+        <p className="text-sm text-grisMuyClaro font-bold ">${precioLista}</p>
       </div>
-    </div>
+    </Link>
   )
 }
 
