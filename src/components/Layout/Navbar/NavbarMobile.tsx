@@ -54,7 +54,7 @@ const NavbarMobile = () => {
               <Link href="/ayuda">Contacta con nosotros</Link>
             </div>
           </div>
-          <div className="mt-12 text-blanco flex flex-row gap-2 px-2">
+          <div className="mt-12 mb-2 text-blanco flex flex-row gap-2 px-2">
             <UserIcon className="h-6 w-6" />
             {userAuth ? (
               <>

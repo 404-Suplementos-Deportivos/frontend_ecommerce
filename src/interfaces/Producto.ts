@@ -7,6 +7,7 @@ export interface Producto {
   descripcion: string
   urlImagen: string
   precioLista: number
+  precioVenta: number
   stock: number
   stockMinimo: number
   estado?: boolean

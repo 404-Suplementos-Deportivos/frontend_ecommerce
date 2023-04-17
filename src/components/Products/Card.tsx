@@ -7,7 +7,7 @@ interface CardProps {
 }
 
 const Card = ({producto}: CardProps) => {
-  const { nombre, precioLista, urlImagen } = producto
+  const { nombre, precioVenta, urlImagen } = producto
 
   return (
     <Link href={`/products/${nombre}`} className="bg-blanco rounded-md shadow-md h-[300px] relative">
@@ -17,7 +17,7 @@ const Card = ({producto}: CardProps) => {
       </div>
       <div className="w-full h-[200] p-2 flex flex-row justify-between items-end absolute left-0 right-0 bottom-0">
         <p className="text-sm text-grisMuyClaro font-bold w-3/5">{nombre}</p>
-        <p className="text-sm text-grisMuyClaro font-bold ">${precioLista}</p>
+        <p className="text-sm text-grisMuyClaro font-bold ">${precioVenta}</p>
       </div>
     </Link>
   )
