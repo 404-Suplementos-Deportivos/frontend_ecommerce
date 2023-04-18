@@ -11,7 +11,7 @@ export default function Products() {
   const { productos, categorias, subcategorias, loading } = useAppSelector(state => state.productos)
   const dispatch = useAppDispatch()
   const router = useRouter()
-  console.log( router.query )
+  const { categoriaSelected, subcategoriaSelected } = router.query
 
   useEffect(() => {
     Promise.all([
