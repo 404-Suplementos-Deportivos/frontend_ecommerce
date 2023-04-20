@@ -45,6 +45,10 @@ body {
   animation: logo-animation-inverted 5s ease-in-out infinite;
 }
 
+.grid-cols-auto {
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
 @keyframes logo-animation {
   0% {
     color: var(--verde);

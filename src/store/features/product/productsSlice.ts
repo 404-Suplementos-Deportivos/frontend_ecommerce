@@ -3,30 +3,39 @@ import { PayloadAction } from "@reduxjs/toolkit/dist/createAction"
 import { Producto } from "@/interfaces/Producto"
 import { Categoria } from "@/interfaces/Categoria"
 import { Subcategoria } from "@/interfaces/Subcategoria"
-import { getProducts, getCategories, getSubcategories } from "@/services/products/productsService"
+import { Filters } from "@/interfaces/Filters"
+import { getProducts, getProduct, getCategories, getSubcategories } from "@/services/products/productsService"
 
 type Error = 'success' | 'error' | 'warning' | 'info'
 
 interface ProductsState {
   productos: Producto[],
+  productosFiltered: Producto[],
+  producto: Producto
   categorias: Categoria[],
   subcategorias: Subcategoria[],
   loading: boolean,
   error: {
     type: Error,
     message: string
-  }
+  },
+  categoriaSelectedURL?: string
+  subcategoriaSelectedURL?: string
 }
 
 const INITIAL_STATE: ProductsState = {
   productos: [],
+  productosFiltered: [],
+  producto: {} as Producto,
   categorias: [],
   subcategorias: [],
   loading: false,
   error: {
     type: 'info',
     message: ''
-  }
+  },
+  categoriaSelectedURL: undefined,
+  subcategoriaSelectedURL: undefined
 }
 
 
@@ -42,6 +51,20 @@ export const productsSlice = createSlice({
       state.loading = false
     },
     getProductsError: (state, action: PayloadAction<string>) => {
+      state.loading = false
+      state.error = {
+        type: 'error',
+        message: action.payload
+      }
+    },
+    getProductStart: (state) => {
+      state.loading = true
+    },
+    getProductSuccess: (state, action: PayloadAction<Producto>) => {
+      state.producto = action.payload
+      state.loading = false
+    },
+    getProductError: (state, action: PayloadAction<string>) => {
       state.loading = false
       state.error = {
         type: 'error',
@@ -75,6 +98,15 @@ export const productsSlice = createSlice({
         type: 'error',
         message: action.payload
       }
+    },
+    setCategoriaSelectedURL: (state, action: PayloadAction<string | undefined>) => {
+      state.categoriaSelectedURL = action.payload
+    },
+    setSubcategoriaSelectedURL: (state, action: PayloadAction<string | undefined>) => {
+      state.subcategoriaSelectedURL = action.payload
+    },
+    setProductsFiltered: (state, action: PayloadAction<Producto[]>) => {
+      state.productosFiltered = action.payload
     }
   }
 })
@@ -83,22 +115,38 @@ export const {
   getProductsStart, 
   getProductsSuccess, 
   getProductsError, 
+  getProductStart,
+  getProductSuccess,
+  getProductError,
   getCategoriesStart,
   getCategoriesSuccess,
   getCategoriesError,
   getSubcategoriesStart,
   getSubcategoriesSuccess,
-  getSubcategoriesError
+  getSubcategoriesError,
+  setCategoriaSelectedURL,
+  setSubcategoriaSelectedURL,
+  setProductsFiltered,
 } = productsSlice.actions
 export default productsSlice.reducer
 
-export const getProductsAsync = () => async (dispatch: any) => {
+export const getProductsAsync = (filters: Filters) => async (dispatch: any) => {
   dispatch(getProductsStart())
   try {
-    const products = await getProducts()
+    const products = await getProducts(filters)
     dispatch(getProductsSuccess(products))
   } catch (error: any) {
     dispatch(getProductsError(error.response.data.message))
+  }
+}
+
+export const getProductAsync = (id: number) => async (dispatch: any) => {
+  dispatch(getProductStart())
+  try {
+    const product = await getProduct(id)
+    dispatch(getProductSuccess(product))
+  } catch (error: any) {
+    dispatch(getProductError(error.response.data.message))
   }
 }
 
@@ -112,7 +160,6 @@ export const getCategoriesAsync = () => async (dispatch: any) => {
   }
 }
 
-// subcategoriesAsync necesita de un id para getSubcategories
 export const getSubcategoriesAsync = (id: number) => async (dispatch: any) => {
   dispatch(getSubcategoriesStart())
   try {

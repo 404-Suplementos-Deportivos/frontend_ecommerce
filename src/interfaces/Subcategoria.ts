@@ -3,5 +3,5 @@ export interface Subcategoria {
   nombre: string
   descripcion: string
   estado: boolean
-  id_categoria: number
+  idCategoria: number
 }

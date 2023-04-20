@@ -7,10 +7,10 @@ interface CardProps {
 }
 
 const Card = ({producto}: CardProps) => {
-  const { nombre, precioVenta, urlImagen } = producto
+  const { id, nombre, precioVenta, urlImagen } = producto
 
   return (
-    <Link href={`/products/${nombre}`} className="bg-blanco rounded-md shadow-md h-[300px] relative">
+    <Link href={`/products/${id}`} className="bg-blanco rounded-md shadow-md h-[300px] relative">
       <div className="w-full h-full absolute top-0 left-0 bg-gradient-to-b from-blanco/0 to-grisOscuro opacity-0 hover:opacity-70 transition-all duration-300 ease-in-out"></div>
       <div className="w-full h-full">
         <Image src={urlImagen} alt={nombre} width={300} height={300} className="w-full h-full object-cover" />
