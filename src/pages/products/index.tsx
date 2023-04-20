@@ -63,7 +63,7 @@ export default function Products() {
         </div>
         <List productos={productosFiltered} />
         {error && <p className="text-red-500">{error.message}</p>}
-        {productos.length === 0 || productosFiltered.length === 0 && !loading && (
+        {productosFiltered.length === 0 && !loading && (
           <div className="flex flex-col md:flex-row justify-center items-center h-60 py-6">
             <Image src={IconoProte} alt="Icono Prote" width={150} height={150} />
             <div>

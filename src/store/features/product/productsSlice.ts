@@ -8,9 +8,27 @@ import { getProducts, getProduct, getCategories, getSubcategories } from "@/serv
 
 type Error = 'success' | 'error' | 'warning' | 'info'
 
+enum OrderBy {
+  'Precio ASC' = "1",
+  'Precio DESC' = "2",
+  'Nombre ASC' = "3",
+  'Nombre DESC' = "4",
+}
+
+enum Precios {
+  "Todos" = "0",
+  "Entre 0 y 3000" = "1",
+  "Entre 3000 y 5000" = "2",
+  "Entre 5000 y 10000" = "3",
+  "Más de 10000" = "4",
+}
+
 interface ProductsState {
   productos: Producto[],
   productosFiltered: Producto[],
+  search: string,
+  order: string,
+  precio: string,
   producto: Producto
   categorias: Categoria[],
   subcategorias: Subcategoria[],
@@ -26,6 +44,9 @@ interface ProductsState {
 const INITIAL_STATE: ProductsState = {
   productos: [],
   productosFiltered: [],
+  search: '',
+  order: OrderBy['Precio ASC'],
+  precio: Precios['Todos'],
   producto: {} as Producto,
   categorias: [],
   subcategorias: [],
@@ -107,6 +128,68 @@ export const productsSlice = createSlice({
     },
     setProductsFiltered: (state, action: PayloadAction<Producto[]>) => {
       state.productosFiltered = action.payload
+    },
+    setSearch: (state, action: PayloadAction<string>) => {
+      state.search = action.payload
+    },
+    setOrder: (state, action: PayloadAction<string>) => {
+      state.order = action.payload
+    },
+    setPrecio: (state, action: PayloadAction<string>) => {
+      state.precio = action.payload
+    },
+    filterProducts: (state) => {
+      const { productos, search, order, precio } = state
+      let productosFiltered = productos
+      if (search) {
+        const regex = new RegExp(search, 'i')
+        productosFiltered = productosFiltered.filter(producto => regex.test(producto.nombre))
+      }
+      if (order) {
+        switch (order) {
+          case OrderBy['Precio ASC']:
+            productosFiltered = productosFiltered.sort((a, b) => a.precioVenta - b.precioVenta)
+            break
+          case OrderBy['Precio DESC']:
+            productosFiltered = productosFiltered.sort((a, b) => b.precioVenta - a.precioVenta)
+            break
+          case OrderBy['Nombre ASC']:
+            productosFiltered = productosFiltered.sort((a, b) => a.nombre.localeCompare(b.nombre))
+            break
+          case OrderBy['Nombre DESC']:
+            productosFiltered = productosFiltered.sort((a, b) => b.nombre.localeCompare(a.nombre))
+            break
+          default:
+            break
+        }
+      }
+      if (precio) {
+        switch (precio) {
+          case Precios['Todos']:
+            break
+          case Precios['Entre 0 y 3000']:
+            productosFiltered = productosFiltered.filter(producto => producto.precioVenta >= 0 && producto.precioVenta <= 3000)
+            break
+          case Precios['Entre 3000 y 5000']:
+            productosFiltered = productosFiltered.filter(producto => producto.precioVenta >= 3000 && producto.precioVenta <= 5000)
+            break
+          case Precios['Entre 5000 y 10000']:
+            productosFiltered = productosFiltered.filter(producto => producto.precioVenta >= 5000 && producto.precioVenta <= 10000)
+            break
+          case Precios['Más de 10000']:
+            productosFiltered = productosFiltered.filter(producto => producto.precioVenta >= 10000)
+            break
+          default:
+            break
+        }
+      }
+      state.productosFiltered = productosFiltered
+    },
+    clearFilters: (state) => {
+      state.productosFiltered = state.productos;
+      state.search = ''
+      state.order = OrderBy['Precio ASC']
+      state.precio = Precios['Todos']
     }
   }
 })
@@ -127,6 +210,11 @@ export const {
   setCategoriaSelectedURL,
   setSubcategoriaSelectedURL,
   setProductsFiltered,
+  setSearch,
+  setOrder,
+  setPrecio,
+  filterProducts,
+  clearFilters
 } = productsSlice.actions
 export default productsSlice.reducer
 

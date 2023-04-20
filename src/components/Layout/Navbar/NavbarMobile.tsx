@@ -53,9 +53,8 @@ const NavbarMobile = () => {
         <nav className="h-full flex flex-col justify-between">
           <div>
             {categorias.map(categoria => (
-              <>
+              <div key={categoria.id}>
                 <div 
-                  key={categoria.id}
                   className="flex justify-between items-center text-blanco p-4 border-b border-b-grisClaro hover:bg-grisClaro transition-colors ease-in-out"
                 >
                   <Link href={`/products?categoriaSelected=${categoria.id}`} passHref>{categoria.nombre}</Link>
@@ -81,7 +80,7 @@ const NavbarMobile = () => {
                       </div>
                     ))
                 )}
-              </>
+              </div>
             ))}
             <div 
               className="flex justify-between items-center text-blanco p-4 border-b border-b-grisClaro hover:bg-grisClaro transition-colors ease-in-out"

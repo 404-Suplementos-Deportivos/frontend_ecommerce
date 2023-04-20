@@ -5,7 +5,14 @@ import { Producto } from '@/interfaces/Producto'
 import { Categoria } from '@/interfaces/Categoria'
 import { Subcategoria } from '@/interfaces/Subcategoria'
 import { useAppSelector, useAppDispatch } from '@/hooks/useReduxStore'
-import { getSubcategoriesAsync, setProductsFiltered } from '@/store/features/product/productsSlice'
+import { 
+  getSubcategoriesAsync, 
+  setSearch,
+  setOrder,
+  setPrecio,
+  filterProducts,
+  clearFilters
+} from '@/store/features/product/productsSlice'
 
 enum OrderBy {
   'Precio ASC' = "1",
@@ -27,9 +34,6 @@ interface FiltersState {
     categoriaSelected: string
     subcategoriaSelected: string
   },
-  search: string
-  order: string
-  precio: string
 }
 
 interface FiltersProps {
@@ -42,24 +46,19 @@ const INITIAL_STATE: FiltersState = {
     categoriaSelected: '',
     subcategoriaSelected: '',
   },
-  search: '',
-  order: '',
-  precio: ''
 }
 
 const Filters = ({categorias, subcategorias}: FiltersProps) => {
   const [filter, setFilter] = useState<FiltersState['filter']>(INITIAL_STATE.filter)
-  const [search, setSearch] = useState<FiltersState['search']>(INITIAL_STATE.search)
-  const [order, setOrder] = useState<FiltersState['order']>(INITIAL_STATE.order)
-  const [precio, setPrecio] = useState<FiltersState['precio']>(INITIAL_STATE.precio)
-  const { productos, productosFiltered, categoriaSelectedURL, subcategoriaSelectedURL } = useAppSelector(state => state.productos)
+  const { productos, categoriaSelectedURL, subcategoriaSelectedURL, search, order, precio } = useAppSelector(state => state.productos)
   const dispatch = useAppDispatch()
   const router = useRouter()
 
   // ! UseEffects
   useEffect(() => {
-    setOrder(OrderBy['Precio ASC'])
-  }, [])
+    dispatch(filterProducts())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productos])
 
   useEffect(() => {
     if (categoriaSelectedURL) {
@@ -95,19 +94,9 @@ const Filters = ({categorias, subcategorias}: FiltersProps) => {
   }, [filter.categoriaSelected, dispatch])
 
   useEffect(() => {
-    dispatch(setProductsFiltered(orderBy(order)))
+    dispatch(filterProducts())
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order])
-
-  useEffect(() => {
-    dispatch(setProductsFiltered(orderByPriceMinMax(precio)))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [precio])
-
-  useEffect(() => {
-    dispatch(setProductsFiltered(filterSearch()))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search])
+  }, [search, order, precio])
 
   // ! Handlers
   const handleChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -126,6 +115,7 @@ const Filters = ({categorias, subcategorias}: FiltersProps) => {
   }
 
   const handleSearch = () => {
+    dispatch(clearFilters())
     const params = new URLSearchParams();
     if (filter.categoriaSelected) {
       params.append("categoriaSelected", filter.categoriaSelected);
@@ -156,63 +146,19 @@ const Filters = ({categorias, subcategorias}: FiltersProps) => {
     } else {
       router.push("/products");
     }
-    setOrder(INITIAL_STATE.order)
-    setPrecio(INITIAL_STATE.precio)
-    setSearch(INITIAL_STATE.search)
+    dispatch(clearFilters())
   }
 
   const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value)
+    dispatch(setSearch(e.target.value))
   }
 
   const handleChangeOrder = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setOrder(e.target.value)
+    dispatch(setOrder(e.target.value))
   }
 
   const handleChangePrecio = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPrecio(e.target.value)
-  }
-
-  // ! Functions
-  const orderBy = (order: string) => {
-    switch (order) {
-      case OrderBy['Precio ASC']:
-        return [...productos].sort((a, b) => a.precioVenta - b.precioVenta)
-      case OrderBy['Precio DESC']:
-        return [...productos].sort((a, b) => b.precioVenta - a.precioVenta)
-      case OrderBy['Nombre ASC']:
-        return [...productos].sort((a, b) => a.nombre.localeCompare(b.nombre))
-      case OrderBy['Nombre DESC']:
-        return [...productos].sort((a, b) => b.nombre.localeCompare(a.nombre))
-      default:
-        return productos
-    }
-  }
-
-  const orderByPriceMinMax = (order: string) => {
-    switch (order) {
-      case Precios['Todos']:
-        return productos
-      case Precios['Entre 0 y 3000']:
-        return [...productos].filter(producto => producto.precioVenta >= 0 && producto.precioVenta <= 3000)
-      case Precios['Entre 3000 y 5000']:
-        return [...productos].filter(producto => producto.precioVenta >= 3000 && producto.precioVenta <= 5000)
-      case Precios['Entre 5000 y 10000']:
-        return [...productos].filter(producto => producto.precioVenta >= 5000 && producto.precioVenta <= 10000)
-      case Precios['Más de 10000']:
-        return [...productos].filter(producto => producto.precioVenta >= 10000)
-      default:
-        return [...productos]
-    }
-  }
-
-  const filterSearch = () => {
-    if (search) {
-      const regex = new RegExp(search, 'i')
-      return [...productosFiltered].filter(producto => regex.test(producto.nombre))
-    } else {
-      return [...productos]
-    }
+    dispatch(setPrecio(e.target.value))
   }
 
   return (

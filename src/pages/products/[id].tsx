@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import Layout from "@/components/Layout/Layout"
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
@@ -41,7 +42,10 @@ export default function Producto() {
     <Layout title={nombre}>
       <div className="mx-auto w-5/6">
         <p className="mt-5 font-extralight text-grisClaro">
-          Productos {'>'} {categoria?.nombre} {'>'} {subcategoria?.nombre}
+          <Link href="/products">Productos</Link> {'> '}
+          <Link href={`/products?categoriaSelected=${categoria?.id}`}>{categoria?.nombre}</Link> {'> '} 
+          <Link href={`/products?categoriaSelected=${categoria?.id}&subcategoriaSelected=${subcategoria?.id}`}>{subcategoria?.nombre}</Link> {'> '} 
+          {nombre}
         </p>
         <div className="my-20">
           <div className="flex flex-col md:flex-row">
