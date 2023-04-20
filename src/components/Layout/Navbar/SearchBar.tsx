@@ -3,7 +3,7 @@ import SearchList from './SearchList'
 
 const SearchBar = () => {
   return (
-    <div className="border rounded-md shadow-sm flex flex-row items-center bg-blanco">
+    <div className="border rounded-md shadow-md flex flex-row items-center bg-blanco">
       <div className="px-4">
         <MagnifyingGlassIcon className='h-4 w-4 text-negro bg-blanco' />
       </div>
