@@ -5,6 +5,8 @@ import { useRouter } from "next/router"
 import Layout from "@/components/Layout/Layout"
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { getProductAsync } from "@/store/features/product/productsSlice"
+import { addToCart } from "@/store/features/product/cartSlice"
+
 
 interface ProductState {
   quantity: number;
@@ -38,6 +40,10 @@ export default function Producto() {
     );
   }
 
+  const handleAddToCart = () => {
+    dispatch(addToCart({ ...producto, cantidad: quantity }))
+  }
+
   return (
     <Layout title={nombre}>
       <div className="mx-auto w-5/6">
@@ -67,7 +73,10 @@ export default function Producto() {
                   </select>
                 </div>
                 <div className="w-full md:w-1/2">
-                  <button className="bg-grisMedio text-blanco rounded-md p-2 my-2 w-full hover:bg-verde transition-colors ease-in-out duration-300">
+                  <button 
+                    className="bg-grisMedio text-blanco rounded-md p-2 my-2 w-full hover:bg-verde transition-colors ease-in-out duration-300"
+                    onClick={handleAddToCart}  
+                  >
                     Agregar al carrito
                   </button>
                 </div>

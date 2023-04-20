@@ -15,4 +15,6 @@ export interface Producto {
   idCategoria: number
   categoria: Categoria
   subcategoria: Subcategoria
+  cantidad?: number
+  subTotal?: number
 }

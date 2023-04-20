@@ -24,7 +24,7 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
 
   // TODO: Solucionar el problema de que el navbar no haga salto cuando se hace scroll hacia arriba
   return (
-    <header className={`z-[200] bg-grisOscuro static ${!isAtTop && 'fixed top-0 left-0 right-0'}`}>
+    <header className={`z-[200] bg-grisOscuro static transition-all ease-in-out ${!isAtTop && 'bg-grisOscuro/70 backdrop-blur-sm fixed top-0 left-0 right-0'}`}>
       <div className='flex flex-row justify-between items-center mx-auto py-4 w-5/6 text-blanco'>
         <div className='flex flex-row items-center gap-4' >
           {isNavbarOpen ? (
@@ -89,7 +89,7 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
       </div>
       {(isNavbarOpen || isCartMenuOpen) && (
         <div 
-          className="fixed w-full h-full z-10 bg-grisClaro/50 cursor-pointer"
+          className="fixed w-full h-screen z-10 bg-grisClaro/50 cursor-pointer"
           onClick={() => {
             dispatch(toggleNavbar(false))
             dispatch(toggleCart(false))
