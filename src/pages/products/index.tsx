@@ -4,7 +4,7 @@ import Image from "next/image"
 import Layout from "@/components/Layout/Layout"
 import List from "@/components/Products/List"
 import Filters from "@/components/Products/Filters"
-import IconoProte from 'public/icons8-protein-supplement-96.png'
+import IconoProte from 'public/icons/icons8-protein-supplement-96.png'
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { 
   getProductsAsync, 
@@ -14,6 +14,7 @@ import {
   setSubcategoriaSelectedURL,
   setProductsFiltered
 } from "@/store/features/product/productsSlice"
+import { toggleNavbar } from "@/store/features/design/designSlice"
 
 
 export default function Products() {
@@ -21,6 +22,11 @@ export default function Products() {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const { categoriaSelected, subcategoriaSelected } = router.query
+
+  useEffect(() => {
+    dispatch(toggleNavbar(false))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query])
 
   useEffect(() => {
     dispatch(getCategoriesAsync())  

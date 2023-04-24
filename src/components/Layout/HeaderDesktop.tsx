@@ -5,7 +5,7 @@ import CartMenu from './Navbar/CartMenu'
 import SearchBar from './Navbar/SearchBar'
 import SearchList from './Navbar/SearchList'
 import ModalLogin from '../Login/ModalLogin'
-import { Tooltip, Popover, Button } from "@nextui-org/react";
+import { Tooltip, Popover, Badge } from "@nextui-org/react";
 import { Bars3Icon, XMarkIcon, ChatBubbleLeftEllipsisIcon, UserIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { toggleNavbar, toggleCart, toggleModalLogin } from '@/store/features/design/designSlice'
@@ -19,12 +19,13 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
   const isNavbarOpen = useAppSelector(state => state.design.isNavbarToggled)
   const isCartMenuOpen = useAppSelector(state => state.design.isCartToggled)
   const userAuth = useAppSelector(state => state.auth.usuario)
+  const items = useAppSelector(state => state.cart.items)
   const dispatch = useAppDispatch()
   const router = useRouter()
 
   // TODO: Solucionar el problema de que el navbar no haga salto cuando se hace scroll hacia arriba
   return (
-    <header className={`z-[200] bg-grisOscuro static transition-all ease-in-out ${!isAtTop && 'bg-grisOscuro/70 backdrop-blur-sm fixed top-0 left-0 right-0'}`}>
+    <header className={`z-[200] bg-grisOscuro static transition-all ease-in-out ${!isAtTop && 'bg-grisOscuro/80 backdrop-blur-sm sticky top-0 left-0 right-0'}`}>
       <div className='flex flex-row justify-between items-center mx-auto py-4 w-5/6 text-blanco'>
         <div className='flex flex-row items-center gap-4' >
           {isNavbarOpen ? (
@@ -80,10 +81,12 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
             )}
           </button>
           <p className='hover:text-verde transition-colors ease-in-out cursor-pointer'>
-            <ShoppingCartIcon 
-              className={`h-6 w-6 r ${isCartMenuOpen && 'text-verde'}`}
-              onMouseEnter={() => dispatch(toggleCart(true))}
-            />
+            <Badge size="sm" content={items.length} color="success"  disableOutline isInvisible={items.length === 0}>
+              <ShoppingCartIcon 
+                className={`h-6 w-6 r ${isCartMenuOpen && 'text-verde'}`}
+                onMouseEnter={() => dispatch(toggleCart(true))}
+              />
+            </Badge>
           </p>
         </div>
       </div>

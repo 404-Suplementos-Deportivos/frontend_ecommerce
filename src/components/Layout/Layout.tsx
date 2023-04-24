@@ -59,10 +59,10 @@ export default function Layout({children, title, description=desc}: Props) {
         <title>{`404 Suplementos Deportivos | ${title}`}</title>
         <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/404_Icono_White.ico" />
+        <link rel="icon" href="/icons/404_Icono_White.ico" />
       </Head>
 
-      <div className={`${isNavbarOpen && 'overflow-hidden h-screen'}`}>
+      <div className={`bg-grisMuyClaro ${isNavbarOpen && 'overflow-hidden h-screen'}`}>
         <Header />
           {children}
           <ToastContainer

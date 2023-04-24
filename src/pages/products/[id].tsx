@@ -6,6 +6,7 @@ import Layout from "@/components/Layout/Layout"
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { getProductAsync } from "@/store/features/product/productsSlice"
 import { addToCart } from "@/store/features/product/cartSlice"
+import { toggleCart } from "@/store/features/design/designSlice"
 
 
 interface ProductState {
@@ -48,6 +49,7 @@ export default function Producto() {
     <Layout title={nombre}>
       <div className="mx-auto w-5/6">
         <p className="mt-5 font-extralight text-grisClaro">
+          <Link href="/">Inicio</Link> {'> '}
           <Link href="/products">Productos</Link> {'> '}
           <Link href={`/products?categoriaSelected=${categoria?.id}`}>{categoria?.nombre}</Link> {'> '} 
           <Link href={`/products?categoriaSelected=${categoria?.id}&subcategoriaSelected=${subcategoria?.id}`}>{subcategoria?.nombre}</Link> {'> '} 
@@ -75,7 +77,10 @@ export default function Producto() {
                 <div className="w-full md:w-1/2">
                   <button 
                     className="bg-grisMedio text-blanco rounded-md p-2 my-2 w-full hover:bg-verde transition-colors ease-in-out duration-300"
-                    onClick={handleAddToCart}  
+                    onClick={() => {
+                      handleAddToCart()
+                      dispatch(toggleCart(true))
+                    }}  
                   >
                     Agregar al carrito
                   </button>

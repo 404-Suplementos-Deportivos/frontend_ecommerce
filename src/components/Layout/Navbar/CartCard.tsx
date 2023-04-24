@@ -1,5 +1,7 @@
 import Image from "next/image"
 import { XMarkIcon, PlusCircleIcon, MinusCircleIcon } from '@heroicons/react/24/outline'
+import { useAppDispatch } from "@/hooks/useReduxStore"
+import { addQuantity, removeQuantity, removeFromCart } from "@/store/features/product/cartSlice"
 import { Producto } from "@/interfaces/Producto"
 
 interface CartCardProps {
@@ -7,21 +9,29 @@ interface CartCardProps {
 }
 
 const CartCard = ({item}: CartCardProps) => {
+  const dispatch = useAppDispatch()
+
   return (
     <div className="bg-blanco min-h-[150px] p-4 mt-4 shadow-lg grid grid-cols-3 gap-4">
       <div className="col-span-1">
         <Image src={item.urlImagen} className='object-fill w-full h-full' alt='Imagen Producto' width={120} height={260} />
       </div>
       <div className="col-span-2 flex flex-col justify-between">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-start gap-2">
           <p className="text-sm text-grisClaro">{item.nombre}</p>
-          <XMarkIcon className="h-4 w-4 cursor-pointer" />
+          <XMarkIcon className="h-4 w-4 cursor-pointer" onClick={() => dispatch(removeFromCart(Number(item?.id)))}/>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex flex-row gap-3 items-center">
-            <MinusCircleIcon className="h-6 w-6 cursor-pointer transition-colors duration-300 ease-in-out hover:text-amarillo" />
+            <MinusCircleIcon 
+              className="h-6 w-6 cursor-pointer transition-colors duration-300 ease-in-out hover:text-amarillo" 
+              onClick={() => dispatch(removeQuantity(Number(item?.id)))}  
+            />
             <p>{item.cantidad}</p>
-            <PlusCircleIcon className="h-6 w-6 cursor-pointer transition-colors duration-300 ease-in-out hover:text-amarillo" />
+            <PlusCircleIcon 
+              className="h-6 w-6 cursor-pointer transition-colors duration-300 ease-in-out hover:text-amarillo" 
+              onClick={() => dispatch(addQuantity(Number(item?.id)))}
+            />
           </div>
           <div className="flex flex-col items-end">
             <p>${item.precioVenta}</p>

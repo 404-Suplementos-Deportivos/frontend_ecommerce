@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout/Layout"
 import Image from "next/image"
-import ErrorImage from '/public/Error404.svg'
+import ErrorImage from '/public/images/Error404.svg'
 
 export default function ErrorPage() {
   return (

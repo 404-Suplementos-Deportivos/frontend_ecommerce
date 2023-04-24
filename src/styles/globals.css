@@ -29,6 +29,16 @@ body {
   font-family: 'Lato', sans-serif;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 .contenedor {
   max-width: 1400px;
   margin: 0 auto;
@@ -96,4 +106,48 @@ body {
 
 ::-webkit-scrollbar-track {
   background-color: var(--grisClaro);
+}
+
+/* cambiar color a las flechas */
+.swiper-button-prev::after, .swiper-button-next::after {
+  color: var(--amarillo); /* reemplaza #FF0000 con el color deseado */
+}
+
+/* cambiar color a los círculos */
+.swiper-pagination-bullet {
+  background-color: var(--verde)!important; /* cambia el color de fondo a tu gusto */
+}
+
+.mySwiper {
+  height: 210px;
+}
+
+@media (min-width: 768px) { 
+  .mySwiper {
+    height: 360px;
+  }
+}
+
+@media (min-width: 1080px) { 
+  .mySwiper {
+    height: 440px;
+  }
+}
+
+@media (min-width: 1440px) { 
+  .mySwiper {
+    height: 550px;
+  }
+}
+
+@media (min-width: 2160px) { 
+  .mySwiper {
+    height: 630px;
+  }
+}
+
+.mySwiper img {
+  object-fit: fill;
+  width: 100%;
+  height: 100%;
 }
