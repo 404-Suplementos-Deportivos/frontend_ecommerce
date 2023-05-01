@@ -26,6 +26,7 @@ enum Precios {
 interface ProductsState {
   productos: Producto[],
   productosFiltered: Producto[],
+  productosFilteredSearch: Producto[],
   search: string,
   order: string,
   precio: string,
@@ -44,6 +45,7 @@ interface ProductsState {
 const INITIAL_STATE: ProductsState = {
   productos: [],
   productosFiltered: [],
+  productosFilteredSearch: [],
   search: '',
   order: OrderBy['Precio ASC'],
   precio: Precios['Todos'],
@@ -190,6 +192,9 @@ export const productsSlice = createSlice({
       state.search = ''
       state.order = OrderBy['Precio ASC']
       state.precio = Precios['Todos']
+    },
+    setProductosFilteredSearch: (state, action: PayloadAction<Producto[]>) => {
+      state.productosFilteredSearch = action.payload
     }
   }
 })
@@ -214,7 +219,8 @@ export const {
   setOrder,
   setPrecio,
   filterProducts,
-  clearFilters
+  clearFilters,
+  setProductosFilteredSearch
 } = productsSlice.actions
 export default productsSlice.reducer
 

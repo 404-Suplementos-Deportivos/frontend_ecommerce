@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import Card from "../Products/Card"
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper";
+import { Navigation, Autoplay } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -13,16 +13,22 @@ const SliderProductos = () => {
   const isSmallScreen = useIsSmallScreen(768)
   const listProductos = productos.slice(0, 12)
 
+  if(!listProductos.length) return null
   return (
     <Swiper
-      slidesPerView={isSmallScreen ? 1 : 3}
+      slidesPerView={isSmallScreen ? 1 : 4}
       spaceBetween={30}
-      modules={[Navigation]}
-      className="mt-5"
       loop={true}
+      autoplay={{
+        delay: 2500,
+        disableOnInteraction: false,
+        stopOnLastSlide: false,
+      }}
+      modules={[Autoplay]}
+      className="mt-5"
     >
-      {listProductos.map(producto => (
-        <SwiperSlide key={producto.id}>
+      {listProductos.map((producto, index) => (
+        <SwiperSlide key={index}>
           <Card producto={producto} />
         </SwiperSlide>
       ))}

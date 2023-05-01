@@ -6,6 +6,7 @@ import { addQuantity, removeQuantity, removeFromCart } from "@/store/features/pr
 const CheckoutListDesktop = () => {
   const dispatch = useAppDispatch()
   const { items, total } = useAppSelector(state => state.cart)
+  const { isAuth } = useAppSelector(state => state.auth)
 
   return (
     <>
@@ -34,12 +35,18 @@ const CheckoutListDesktop = () => {
           <div className="col-span-1 flex flex-row gap-3 items-center justify-center">
             <MinusCircleIcon
               className="h-6 w-6 cursor-pointer transition-colors duration-300 ease-in-out hover:text-amarillo"
-              onClick={() => dispatch(removeQuantity(Number(item?.id)))}
+              onClick={() => dispatch(removeQuantity({
+                idProducto: Number(item?.id),
+                isAuth: isAuth
+              }))}
             />
             <p>{item.cantidad}</p>
             <PlusCircleIcon
               className="h-6 w-6 cursor-pointer transition-colors duration-300 ease-in-out hover:text-amarillo"
-              onClick={() => dispatch(addQuantity(Number(item?.id)))}
+              onClick={() => dispatch(addQuantity({
+                idProducto: Number(item?.id),
+                isAuth: isAuth
+              }))}
             />
           </div>
           <div className="col-span-1 flex flex-row gap-3 items-center justify-center">
@@ -48,7 +55,10 @@ const CheckoutListDesktop = () => {
           <div className="col-span-1 flex flex-row gap-3 items-center justify-end">
             <XMarkIcon
               className="h-6 w-6 cursor-pointer transition-colors duration-300 ease-in-out hover:text-amarillo"
-              onClick={() => dispatch(removeFromCart(Number(item?.id)))}
+              onClick={() => dispatch(removeFromCart({
+                idProducto: Number(item?.id),
+                isAuth: isAuth
+              }))}
             />
           </div>
         </div>

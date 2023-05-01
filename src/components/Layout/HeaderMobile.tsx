@@ -49,7 +49,7 @@ const HeaderMobile = ({isAtTop}: HeaderMobileProps) => {
         </div>
         <div className='relative'>
           <SearchBar />
-          {/* <SearchList /> */}
+          <SearchList />
         </div>
       </div>
       <NavbarMobile />

@@ -10,7 +10,7 @@ export default function ErrorPage() {
     >
       <div className="w-full h-full py-14 flex flex-col items-center justify-center">
         <Image src={ErrorImage} alt="Error 404" width={500} height={500} />
-        <h3 className="text-3xl font-bold">404 - Página no encontrada</h3>
+        <h3 className="!text-5xl logo !text-negro">404 - Página no encontrada</h3>
       </div>
     </Layout>
   )

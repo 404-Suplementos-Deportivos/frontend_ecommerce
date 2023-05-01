@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation, EffectFade } from "swiper";
 import "swiper/css";
@@ -33,22 +34,34 @@ const SliderBanners = () => {
       className="mySwiper"
     >
       <SwiperSlide>
-        <Image src={Slider01} alt="Slider 01" priority={true} />
+        <Link href="/products">
+          <Image src={Slider01} alt="Slider 01" priority={true} />
+        </Link>
       </SwiperSlide>
       <SwiperSlide>
-        <Image src={Slider02} alt="Slider 02" priority={true} />
+        <Link href="/products">
+          <Image src={Slider02} alt="Slider 02" priority={true} />
+        </Link>
       </SwiperSlide>
       <SwiperSlide>
-        <Image src={Slider03} alt="Slider 03" priority={true} />
+        <Link href="/products">
+          <Image src={Slider03} alt="Slider 03" priority={true} />
+        </Link>
       </SwiperSlide>
       <SwiperSlide>
-        <Image src={Slider04} alt="Slider 04" priority={true} />
+        <Link href="/products">
+          <Image src={Slider04} alt="Slider 04" priority={true} />
+        </Link>
       </SwiperSlide>
       <SwiperSlide>
-        <Image src={Slider05} alt="Slider 05" priority={true} />
+        <Link href="/products">
+          <Image src={Slider05} alt="Slider 05" priority={true} />
+        </Link>
       </SwiperSlide>
       <SwiperSlide>
-        <Image src={Slider06} alt="Slider 06" priority={true} />
+        <Link href="/products">
+          <Image src={Slider06} alt="Slider 06" priority={true} />
+        </Link>
       </SwiperSlide>
     </Swiper>
   )

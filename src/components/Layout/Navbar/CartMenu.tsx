@@ -3,20 +3,32 @@ import { useRouter } from "next/router"
 import { XMarkIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Producto } from "@/interfaces/Producto"
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
-import { toggleCart } from "@/store/features/design/designSlice"
-import { setCart, clearCart } from "@/store/features/product/cartSlice"
+import { toggleCart, toggleModalLogin } from "@/store/features/design/designSlice"
+import { clearCart } from "@/store/features/product/cartSlice"
 import CartCard from "./CartCard"
+import { getCartData } from "@/store/features/product/cartSlice"
 
 const CartMenu = () => {
   const isCartMenuOpen = useAppSelector(state => state.design.isCartToggled)
   const dispatch = useAppDispatch()
   const router = useRouter()
   const { items, total } = useAppSelector(state => state.cart)
+  const { isAuth } = useAppSelector(state => state.auth)
 
   useEffect(() => {
-    dispatch(setCart())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    dispatch(getCartData(isAuth))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuth])
+
+  const handleClick = () => {
+    if(isAuth) {
+      dispatch(toggleCart(false))
+      router.push('/checkout')
+    } else {
+      dispatch(toggleCart(false))
+      dispatch(toggleModalLogin(true))
+    }
+  }
 
   const isCartEmpty = items.length === 0
 
@@ -26,9 +38,9 @@ const CartMenu = () => {
         <div>
           <div className="flex flex-row justify-between bg-grisMuyClaro p-4">
             <div>
-              <h4>Carrito de Compras</h4>
+              <h4 className="font-extrabold">Carrito de Compras</h4>
               <p>{items.length} Producto/s</p>
-              <TrashIcon className="h-6 w-6 cursor-pointer" onClick={() => dispatch(clearCart())} />
+              <TrashIcon className="h-6 w-6 cursor-pointer" onClick={() => dispatch(clearCart({isAuth}))} />
             </div>
             <div>
               <XMarkIcon className="h-6 w-6 cursor-pointer" onClick={() => dispatch(toggleCart(false))} />
@@ -53,10 +65,7 @@ const CartMenu = () => {
             <button
               className={`bg-grisClaro text-blanco p-6 text-center block w-full mt-2 transition-colors duration-300 ease-in-out ${isCartEmpty ? 'cursor-not-allowed disabled' : 'hover:bg-amarillo'}`}
               disabled={isCartEmpty}
-              onClick={() => {
-                dispatch(toggleCart(false))
-                router.push('/checkout')
-              }}
+              onClick={handleClick}
             >
               Finalizar Compra
             </button>

@@ -40,7 +40,7 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
 
         <div className='w-8/12 relative'>
           <SearchBar />
-          {/* <SearchList /> */}
+          <SearchList />
         </div>
 
         <div className='flex flex-row items-center gap-6'>

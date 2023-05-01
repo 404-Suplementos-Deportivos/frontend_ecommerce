@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Layout from "@/components/Layout/Layout"
+import SliderProductos from "@/components/Home/SliderProductos"
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { getProductAsync } from "@/store/features/product/productsSlice"
 import { addToCart } from "@/store/features/product/cartSlice"
@@ -17,6 +18,7 @@ export default function Producto() {
   const router = useRouter()
   const { id } = router.query
   const { producto, loading, error } = useAppSelector(state => state.productos)
+  const { isAuth } = useAppSelector(state => state.auth)
   const dispatch = useAppDispatch()
   const [quantity, setQuantity] = useState<ProductState['quantity']>(1);
 
@@ -42,7 +44,13 @@ export default function Producto() {
   }
 
   const handleAddToCart = () => {
-    dispatch(addToCart({ ...producto, cantidad: quantity }))
+    dispatch(addToCart({
+      product: {
+        ...producto,
+        cantidad: quantity
+      },
+      isAuth: isAuth
+    }))
   }
 
   return (
@@ -55,7 +63,7 @@ export default function Producto() {
           <Link href={`/products?categoriaSelected=${categoria?.id}&subcategoriaSelected=${subcategoria?.id}`}>{subcategoria?.nombre}</Link> {'> '} 
           {nombre}
         </p>
-        <div className="my-20">
+        <div className="my-14">
           <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-1/2">
               <Image src={urlImagen} alt={nombre} width={500} height={500} />
@@ -89,6 +97,13 @@ export default function Producto() {
             </div>
           </div>
         </div>
+        <div className="mb-16">
+          <h1 className="font-bold text-5xl">Productos similares</h1>
+          <SliderProductos />
+          <div className="w-full">
+            <Link href="/products" className="mx-auto bg-grisClaro text-blanco py-2 px-6 mt-5 text-center block w-full md:w-fit transition-colors duration-300 ease-in-out hover:bg-amarillo rounded-md">Ver todos los productos</Link>
+          </div>
+      </div>
       </div>
     </Layout>
   )
