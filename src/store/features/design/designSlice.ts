@@ -6,6 +6,7 @@ interface DesignState {
   isNavbarToggled: boolean
   isCartToggled: boolean
   isModalLoginVisible: boolean
+  isReady: boolean
   toast: {
     message: string
     type: 'success' | 'error' | 'info' | 'warning'
@@ -16,6 +17,7 @@ const INITIAL_STATE: DesignState = {
   isNavbarToggled: false,
   isCartToggled: false,
   isModalLoginVisible: false,
+  isReady: false,
   toast: {
     message: '',
     type: 'info'
@@ -40,9 +42,12 @@ export const designSlice = createSlice({
       const { message, type } = action.payload
       state.toast = { message, type }
       toast[type](message)
-    }
+    },
+    setIsReady: (state, action: PayloadAction<boolean>) => {
+      state.isReady = action.payload
+    },
   }
 })
 
-export const { toggleNavbar, toggleCart, toggleModalLogin, showToast } = designSlice.actions
+export const { toggleNavbar, toggleCart, toggleModalLogin, showToast, setIsReady } = designSlice.actions
 export default designSlice.reducer

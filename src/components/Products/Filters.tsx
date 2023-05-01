@@ -163,7 +163,7 @@ const Filters = ({categorias, subcategorias}: FiltersProps) => {
 
   return (
     <>
-      <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center bg-grisMuyClaro rounded-xl md:rounded-full py-2 px-4 space-y-4 md:space-y-0">
+      <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center bg-grisClaro/25 rounded-xl md:rounded-full py-2 px-4 space-y-4 md:space-y-0">
         <div className="flex flex-row items-center">
           <p className="text-sm text-grisOscuro font-bold">Categoría:</p>
           <select 
@@ -201,7 +201,7 @@ const Filters = ({categorias, subcategorias}: FiltersProps) => {
           </select>
         </div>
       </div>
-      <div className="mt-2 md:grid md:grid-cols-4 md:items-center bg-grisMuyClaro rounded-xl md:rounded-full py-2 px-4">
+      <div className="mt-2 md:grid md:grid-cols-4 md:items-center bg-grisClaro/25 rounded-xl md:rounded-full py-2 px-4">
         <div className="flex flex-row items-center mt-2 md:mt-0 md:col-span-1">
           <p className="text-sm text-grisOscuro font-bold">Precio entre:</p>
           <select className="ml-2 text-sm text-grisOscuro font-bold border border-grisOscuro rounded-md px-2 py-1 w-full md:w-auto" value={precio} onChange={handleChangePrecio}>
