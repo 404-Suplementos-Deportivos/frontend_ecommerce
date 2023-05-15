@@ -29,9 +29,8 @@ export default function Checkout() {
 
   useEffect(() => {
     if(comprobante.message) {
-      setTimeout(() => {
-        router.push('/')
-      }, 3000)
+      dispatch(cleanCart())
+      router.push(comprobante.init_point as string)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comprobante])

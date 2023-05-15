@@ -56,11 +56,6 @@ export const createComprobanteAsync = (comprobante: Comprobante) => async (dispa
     dispatch(getBillingStart())
     const response = await createComprobante(comprobante)
     dispatch(getBillingSuccess(response))
-    dispatch(showToast({
-      type: 'success',
-      message: response.message as string
-    }))
-    dispatch(cleanCart())
   } catch (error: any) {
     dispatch(getBillingError(error.response.data.message))
     dispatch(showToast({

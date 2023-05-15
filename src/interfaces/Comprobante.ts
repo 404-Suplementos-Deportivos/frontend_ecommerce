@@ -9,4 +9,5 @@ export interface Comprobante {
   idEstado?: number;
   detalleComprobante: DetalleComprobante[];
   message?: string;
+  init_point?: string;
 }
