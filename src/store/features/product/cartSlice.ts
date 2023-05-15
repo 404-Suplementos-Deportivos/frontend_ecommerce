@@ -210,6 +210,10 @@ export const getCartData = (authenticated: boolean) => async (dispatch: any) => 
   }
 }
 
+export const cleanCart = () => (dispatch: any) => {
+  dispatch(clearCart({isAuth: true}))
+}
+
 export const setCartLocalStorage = (cart: CartState) => {
   localStorage.setItem('cart', JSON.stringify(cart))
 }

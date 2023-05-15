@@ -74,10 +74,12 @@ export default function Producto() {
               <p className="text-grisOscuro font-extrabold mt-6 text-xl">Precio: <span className="font-normal">${precioVenta}</span></p>
               <div className="flex flex-col">
                 <div className="w-full md:w-1/2">
+                  {stock <= 0 && <p className="text-rojo">No hay stock disponible</p>}
                   <select
                     className="w-full border border-grisClaro rounded-md p-2 my-2"
                     value={quantity}
                     onChange={handleQuantityChange}
+                    disabled={stock <= 0}
                   >
                     {options}
                   </select>

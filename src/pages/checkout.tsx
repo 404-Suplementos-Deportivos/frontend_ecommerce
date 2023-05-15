@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+import { useRouter } from "next/router"
 import { Radio, Input } from "@nextui-org/react"
 import Layout from "@/components/Layout/Layout"
 import Loader from "@/components/Layout/Navbar/Loader"
@@ -5,8 +7,13 @@ import CheckoutListDesktop from "@/components/Products/CheckoutListDesktop"
 import CheckoutListMobile from "@/components/Products/CheckoutListMobile"
 import { CreditCardIcon, BanknotesIcon, QrCodeIcon, BuildingLibraryIcon } from "@heroicons/react/24/outline"
 import { useIsSmallScreen } from "@/hooks/useIsSmallScreen"
-import { useAppSelector } from "@/hooks/useReduxStore"
+import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { useProtectedRoute } from "@/hooks/useProtectedRoute"
+import { createComprobanteAsync } from "@/store/features/billing/billingSlice"
+import { showToast } from "@/store/features/design/designSlice"
+import { cleanCart } from "@/store/features/product/cartSlice"
+import { Comprobante } from "@/interfaces/Comprobante"
+import { DetalleComprobante } from "@/interfaces/DetalleComprobante"
 import { getYears, getMonths } from "@/libs/helpers"
 
 export default function Checkout() {
@@ -14,8 +21,38 @@ export default function Checkout() {
   const { items } = useAppSelector(state => state.cart)
   const { loading: loadingUser } = useAppSelector(state => state.user)
   const { isAuth, loading: loadingAuth } = useAppSelector(state => state.auth) 
+  const { comprobante, error } = useAppSelector(state => state.billing)
+  const dispatch = useAppDispatch()
+  const router = useRouter()
 
   useProtectedRoute()
+
+  useEffect(() => {
+    if(comprobante.message) {
+      setTimeout(() => {
+        router.push('/')
+      }, 3000)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [comprobante])
+
+  const realizarPedido = async () => {
+    const pedido: DetalleComprobante[] = items.map(item => {
+      return {
+        cantidad: item.cantidad as number,
+        precio: item.precioVenta as number,
+        descuento: 0 as number,
+        idProducto: item.id as number
+      }
+    })
+
+    const detalle: Comprobante = {
+      detalleComprobante: pedido
+    }
+
+    await dispatch(createComprobanteAsync(detalle))
+    
+  }
 
   return (
     !loadingUser && !loadingAuth && isAuth ? (
@@ -145,6 +182,7 @@ export default function Checkout() {
               </div>
               <button
                 className='bg-grisClaro text-blanco py-4 px-6 text-center block w-full mt-8 transition-colors duration-300 ease-in-out hover:bg-amarillo'
+                onClick={realizarPedido}
               >
                 Realizar pedido
               </button>

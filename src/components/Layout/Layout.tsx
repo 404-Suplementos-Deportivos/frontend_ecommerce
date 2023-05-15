@@ -85,6 +85,7 @@ export default function Layout({children, title, description=desc}: Props) {
           theme="dark"
           autoClose={2000}
           style={{ zIndex: '10000' }}
+          limit={1}
         />
         <Footer />
       </div>
