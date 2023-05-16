@@ -157,6 +157,7 @@ export const cartSlice = createSlice({
     clearCart: (state, action: PayloadAction<{isAuth: boolean}>) => {
       state.items = []
       state.total = 0
+      setCartLocalStorage(state)
       
       const isAuth = action.payload.isAuth
       if(isAuth) {

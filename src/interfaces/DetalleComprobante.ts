@@ -5,4 +5,5 @@ export interface DetalleComprobante {
   descuento: number;
   idProducto: number;
   idComprobante?: number;
+  nombreProducto?: string;
 }

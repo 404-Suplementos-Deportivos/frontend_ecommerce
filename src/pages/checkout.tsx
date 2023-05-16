@@ -11,7 +11,6 @@ import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { useProtectedRoute } from "@/hooks/useProtectedRoute"
 import { createComprobanteAsync } from "@/store/features/billing/billingSlice"
 import { showToast } from "@/store/features/design/designSlice"
-import { cleanCart } from "@/store/features/product/cartSlice"
 import { Comprobante } from "@/interfaces/Comprobante"
 import { DetalleComprobante } from "@/interfaces/DetalleComprobante"
 import { getYears, getMonths } from "@/libs/helpers"
@@ -29,8 +28,13 @@ export default function Checkout() {
 
   useEffect(() => {
     if(comprobante.message) {
-      dispatch(cleanCart())
-      router.push(comprobante.init_point as string)
+      dispatch(showToast({
+        type: 'success',
+        message: comprobante.message
+      }))
+      setTimeout(() => {
+        router.push(comprobante.init_point as string)
+      }, 2000)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comprobante])
@@ -41,7 +45,8 @@ export default function Checkout() {
         cantidad: item.cantidad as number,
         precio: item.precioVenta as number,
         descuento: 0 as number,
-        idProducto: item.id as number
+        idProducto: item.id as number,
+        nombreProducto: item.nombre as string
       }
     })
 
@@ -109,6 +114,7 @@ export default function Checkout() {
                   underlined 
                   color="default" 
                   fullWidth
+                  disabled
                 />
               </div>
               <div>
@@ -122,6 +128,7 @@ export default function Checkout() {
                     type="number"
                     maxLength={4}
                     minLength={4}
+                    disabled
                   />
                   <Input 
                     aria-label="state2"
@@ -131,6 +138,7 @@ export default function Checkout() {
                     type="number"
                     maxLength={4}
                     minLength={4}
+                    disabled
                   />
                   <Input 
                     aria-label="state3"
@@ -140,6 +148,7 @@ export default function Checkout() {
                     type="number"
                     maxLength={4}
                     minLength={4}
+                    disabled
                   />
                   <Input 
                     aria-label="state4"
@@ -149,6 +158,7 @@ export default function Checkout() {
                     type="number"
                     maxLength={4}
                     minLength={4}
+                    disabled
                   />
                 </div>
               </div>
@@ -156,12 +166,12 @@ export default function Checkout() {
                 <div className="w-full flex flex-col justify-between">
                   <p className="font-bold text-grisClaro/60 mt-4 mb-2 text-sm">Fecha de Expiración</p>
                   <div className="flex flex-row gap-2">
-                    <select className="w-full bg-grisMuyClaro text-center border-b border-grisClaro/50 transition-colors duration-300 focus:border-b-negro focus:outline-none ">
+                    <select className="w-full bg-grisMuyClaro text-center border-b border-grisClaro/50 transition-colors duration-300 focus:border-b-negro focus:outline-none" disabled>
                       {getMonths.map((month, index) => (
                         <option key={index} value={index}>{month}</option>
                       ))}
                     </select>
-                    <select className="w-full bg-grisMuyClaro text-center border-b border-grisClaro/50 transition-colors duration-300 focus:border-b-negro focus:outline-none">
+                    <select className="w-full bg-grisMuyClaro text-center border-b border-grisClaro/50 transition-colors duration-300 focus:border-b-negro focus:outline-none" disabled>
                       {getYears.map((year, index) => (
                         <option key={index} value={index}>{year}</option>
                       ))}
@@ -176,6 +186,7 @@ export default function Checkout() {
                     underlined 
                     color="default" 
                     type="number"
+                    disabled
                   />
                 </div>
               </div>

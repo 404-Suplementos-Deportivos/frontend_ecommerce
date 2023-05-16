@@ -10,6 +10,8 @@ import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { useProtectedRoute } from "@/hooks/useProtectedRoute"
 import { getUserAsync } from "@/store/features/user/userSlice"
 import { showToast } from "@/store/features/design/designSlice"
+import { cleanCart } from "@/store/features/product/cartSlice"
+import { saveComprobante } from "@/services/billing/billingService"
 
 enum Views {
   PROFILE= 'profile',
@@ -23,9 +25,17 @@ export default function EditPage() {
   const { usuario, error, loading: loadingUser } = useAppSelector(state => state.user)
   const { isAuth, loading: loadingAuth } = useAppSelector(state => state.auth)
 
-  const { view, id } = router.query // view = profile, password, orders or undefinedw
+  const { view, id, payment_id } = router.query // view = profile, password, orders or undefinedw
 
   useProtectedRoute()
+
+  useEffect(() => {
+    if(payment_id) {
+      guardarComprobante(payment_id as string)
+      // Cargar ordenes
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [payment_id])
 
   useEffect(() => {
     if(id) {
@@ -37,13 +47,38 @@ export default function EditPage() {
     if (view && !Object.values(Views).includes(view as Views)) {
       router.push('/404')
     }
-  }, [view, router])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view])
 
   useEffect(() => {
     if (error.type === 'error') {
       dispatch(showToast(error))
     }
   }, [error, dispatch]);
+
+  const guardarComprobante = async (idOrden: string) => {
+    try {
+      const response = await saveComprobante(idOrden)
+      if(response.data === 'approved') {
+        dispatch(showToast({
+          type: 'success',
+          message: response.message
+        }))
+        dispatch(cleanCart())
+      } else {
+        dispatch(showToast({
+          type: 'error',
+          message: response.message
+        }))
+      }
+    } catch (error: any) {
+      console.log( error.response.data.message )
+      dispatch(showToast({
+        type: 'error',
+        message: error.response.data.message
+      }))
+    }
+  }
 
   return (
     !loadingUser && !loadingAuth && isAuth ? (

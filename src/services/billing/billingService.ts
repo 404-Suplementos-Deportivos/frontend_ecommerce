@@ -5,3 +5,8 @@ export const createComprobante = async (comprobante: Comprobante): Promise<Compr
   const response = await axios.post('/ventas', comprobante)
   return response.data
 }
+
+export const saveComprobante = async (numOrden: string): Promise<any> => {
+  const response = await axios.get(`/ventas/${numOrden}`)
+  return response.data
+}
