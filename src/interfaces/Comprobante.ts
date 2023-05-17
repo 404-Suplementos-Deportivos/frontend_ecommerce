@@ -7,7 +7,9 @@ export interface Comprobante {
   numeroFactura?: number;
   idUsuario?: number;
   idEstado?: number;
+  estadoFactura?: string;
   detalleComprobante: DetalleComprobante[];
   message?: string;
   init_point?: string;
+
 }

@@ -11,7 +11,8 @@ import { useProtectedRoute } from "@/hooks/useProtectedRoute"
 import { getUserAsync } from "@/store/features/user/userSlice"
 import { showToast } from "@/store/features/design/designSlice"
 import { cleanCart } from "@/store/features/product/cartSlice"
-import { saveComprobante } from "@/services/billing/billingService"
+import { saveComprobante, getComprobantes } from "@/services/billing/billingService"
+import { Comprobante } from "@/interfaces/Comprobante"
 
 enum Views {
   PROFILE= 'profile',
@@ -19,20 +20,32 @@ enum Views {
   ORDERS= 'orders'
 }
 
+interface EditPageState {
+  comprobantes: Comprobante[]
+}
+
 export default function EditPage() {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { usuario, error, loading: loadingUser } = useAppSelector(state => state.user)
   const { isAuth, loading: loadingAuth } = useAppSelector(state => state.auth)
+  const [comprobantes, setComprobantes] = useState<EditPageState['comprobantes']>([])
 
   const { view, id, payment_id } = router.query // view = profile, password, orders or undefinedw
 
   useProtectedRoute()
 
   useEffect(() => {
+    if(view === Views.ORDERS) {
+      obtenerComprobantes()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view])
+
+  useEffect(() => {
     if(payment_id) {
       guardarComprobante(payment_id as string)
-      // Cargar ordenes
+      
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payment_id])
@@ -65,12 +78,29 @@ export default function EditPage() {
           message: response.message
         }))
         dispatch(cleanCart())
+        obtenerComprobantes()
       } else {
         dispatch(showToast({
           type: 'error',
           message: response.message
         }))
       }
+    } catch (error: any) {
+      console.log( error.response.data.message )
+      dispatch(showToast({
+        type: 'error',
+        message: error.response.data.message
+      }))
+    } finally {
+      // Cargar ordenes
+      obtenerComprobantes()
+    }
+  }
+
+  const obtenerComprobantes = async () => {
+    try {
+      const response = await getComprobantes()
+      setComprobantes(response.data)
     } catch (error: any) {
       console.log( error.response.data.message )
       dispatch(showToast({
@@ -92,7 +122,7 @@ export default function EditPage() {
           <div className="md:col-span-3 mt-6 md:mt-0">
             {view === Views.PROFILE && <EditForm />}
             {view === Views.PASSWORD && <ChangePassword />}
-            {view === Views.ORDERS && <Orders />}
+            {view === Views.ORDERS && <Orders comprobantes={comprobantes} />}
           </div>
         </div>
       </Layout>
