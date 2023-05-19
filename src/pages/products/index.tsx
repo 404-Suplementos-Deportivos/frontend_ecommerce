@@ -28,16 +28,20 @@ export default function Products() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (categoriaSelected || subcategoriaSelected) {
-      dispatch(setCategoriaSelectedURL(categoriaSelected?.toString()));
-      dispatch(setSubcategoriaSelectedURL(subcategoriaSelected?.toString()));
-      dispatch(getSubcategoriesAsync(Number(categoriaSelected)));
-      dispatch(getProductsAsync({ categoria: categoriaSelected?.toString(), subcategoria: subcategoriaSelected?.toString() }));
-    } else {
-      dispatch(setCategoriaSelectedURL(undefined));
-      dispatch(setSubcategoriaSelectedURL(undefined));
-      dispatch(getProductsAsync({ categoria: undefined, subcategoria: undefined }));
-    }
+    const loadData = async () => {
+      if (categoriaSelected || subcategoriaSelected) {
+        dispatch(setCategoriaSelectedURL(categoriaSelected?.toString()));
+        dispatch(setSubcategoriaSelectedURL(subcategoriaSelected?.toString()));
+        await dispatch(getSubcategoriesAsync(Number(categoriaSelected)));
+        await dispatch(getProductsAsync({ categoria: categoriaSelected?.toString(), subcategoria: subcategoriaSelected?.toString() }));
+      } else {
+        dispatch(setCategoriaSelectedURL(undefined));
+        dispatch(setSubcategoriaSelectedURL(undefined));
+        await dispatch(getProductsAsync({ categoria: undefined, subcategoria: undefined }));
+      }
+    };
+
+    loadData();
   }, [categoriaSelected, subcategoriaSelected, dispatch]);
 
   useEffect(() => {
@@ -59,10 +63,12 @@ export default function Products() {
       <div className="mx-auto w-5/6">
         <h3 className="text-2xl font-bold text-grisOscuro my-5">Nuestros productos</h3>
         <div>
-          <Filters
-            categorias={categorias}
-            subcategorias={subcategorias}
-          />
+          {categorias && subcategorias && (
+            <Filters
+              categorias={categorias}
+              subcategorias={subcategorias}
+            />
+          )}
         </div>
         <List productos={productosFiltered} />
         {error && <p className="text-red-500">{error.message}</p>}
