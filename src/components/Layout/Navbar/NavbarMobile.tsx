@@ -90,7 +90,7 @@ const NavbarMobile = () => {
             <div 
               className="flex justify-between items-center text-blanco p-4 border-b border-b-grisClaro hover:bg-grisClaro transition-colors ease-in-out"
             >
-              <Link href="/ayuda">Contacta con nosotros</Link>
+              <Link href="/ayuda?view=terminos">Contacta con nosotros</Link>
             </div>
           </div>
           <div className="mt-12 mb-2 text-blanco flex flex-row gap-2 px-2">

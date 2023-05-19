@@ -44,7 +44,7 @@ const HeaderDesktop = ({isAtTop}: HeaderDesktopProps) => {
         </div>
 
         <div className='flex flex-row items-center gap-6'>
-          <Link href={'/ayuda'} className='flex flex-col justify-center items-center hover:text-verde transition-colors ease-in-out cursor-pointer'>
+          <Link href={'/ayuda?view=terminos'} className='flex flex-col justify-center items-center hover:text-verde transition-colors ease-in-out cursor-pointer'>
             <Tooltip content={'Contacta con nosotros'} placement={'bottom'} color='success' >
               <ChatBubbleLeftEllipsisIcon className='h-6 w-6 cursor-pointer'/>
             </Tooltip>

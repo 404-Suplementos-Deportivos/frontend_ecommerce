@@ -4,6 +4,7 @@ import { Usuario } from "@/interfaces/Usuario"
 import { getUser } from "@/services/users/usersService"
 import { updateUser, deleteUser, changePassword } from "@/services/users/usersService"
 import { showToast } from "../design/designSlice"
+import { clearUsuarioAuth } from "../auth/authSlice"
 
 type Error = 'success' | 'error' | 'warning' | 'info'
 
@@ -162,8 +163,7 @@ export const deleteUserAsync = (id: string) => async (dispatch: any) => {
       message: response.message
     }))
     // Cerrar sesión
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
+    dispatch(clearUsuarioAuth())
     // Redireccionar a /
     window.location.href = '/'
   } catch (error: any) {

@@ -38,9 +38,9 @@ const Footer = () => {
           <p className="md:text-center py-4 m-0 font-bold">404 Suplementos Deportivos. Todos los derechos reservados. &copy; {new Date().getFullYear()}</p>
           <div>
             <ul className="flex flex-col md:flex-row md:justify-center list-none m-0 p-0 text-grisMuyClaro">
-              <li className="mr-4"><Link href={'/'}>Términos y condiciones</Link></li>
-              <li className="mr-4"><Link href={'/'}>Política de privacidad</Link></li>
-              <li className="mr-4"><Link href={'/'}>Política de cookies</Link></li>
+              <li className="mr-4"><Link href={'/ayuda?view=terminos'}>Términos y condiciones</Link></li>
+              <li className="mr-4"><Link href={'/ayuda?view=privacidad'}>Política de privacidad</Link></li>
+              <li className="mr-4"><Link href={'/ayuda?view=cookies'}>Política de cookies</Link></li>
             </ul>
           </div>
         </div>
