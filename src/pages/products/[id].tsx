@@ -51,6 +51,7 @@ export default function Producto() {
       },
       isAuth: isAuth
     }))
+    setQuantity(1)
   }
 
   return (

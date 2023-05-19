@@ -19,6 +19,16 @@ export const updateUser = async (usuario: Usuario): Promise<Usuario> => {
   return data
 }
 
+export const changePassword = async (password: string): Promise<any> => {
+  const { data } = await axios.put(`/users/change-password`, { password })
+  return data
+}
+
+export const deleteUser = async (id: string): Promise<any> => {
+  const { data } = await axios.delete(`/users/${id}`)
+  return data
+}
+
 export const getCart = async (): Promise<Cart> => {
   const { data } = await axios.get(`/users/cart`)
   return data

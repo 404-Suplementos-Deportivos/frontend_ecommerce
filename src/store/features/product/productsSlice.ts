@@ -141,51 +141,53 @@ export const productsSlice = createSlice({
       state.precio = action.payload
     },
     filterProducts: (state) => {
-      const { productos, search, order, precio } = state
-      let productosFiltered = productos
+      const { productos, search, order, precio } = state;
+      let productosFiltered = [...productos];
+    
       if (search) {
-        const regex = new RegExp(search, 'i')
-        productosFiltered = productosFiltered.filter(producto => regex.test(producto.nombre))
+        const regex = new RegExp(search, 'i');
+        productosFiltered = productosFiltered.filter(producto => regex.test(producto.nombre));
       }
+    
       if (order) {
         switch (order) {
           case OrderBy['Precio ASC']:
-            productosFiltered = productosFiltered.sort((a, b) => a.precioVenta - b.precioVenta)
-            break
+            productosFiltered.sort((a, b) => a.precioVenta - b.precioVenta);
+            break;
           case OrderBy['Precio DESC']:
-            productosFiltered = productosFiltered.sort((a, b) => b.precioVenta - a.precioVenta)
-            break
+            productosFiltered.sort((a, b) => b.precioVenta - a.precioVenta);
+            break;
           case OrderBy['Nombre ASC']:
-            productosFiltered = productosFiltered.sort((a, b) => a.nombre.localeCompare(b.nombre))
-            break
+            productosFiltered.sort((a, b) => a.nombre.localeCompare(b.nombre));
+            break;
           case OrderBy['Nombre DESC']:
-            productosFiltered = productosFiltered.sort((a, b) => b.nombre.localeCompare(a.nombre))
-            break
+            productosFiltered.sort((a, b) => b.nombre.localeCompare(a.nombre));
+            break;
           default:
-            break
+            break;
         }
       }
+    
       if (precio) {
-        switch (precio) {
-          case Precios['Todos']:
-            break
-          case Precios['Entre 0 y 3000']:
-            productosFiltered = productosFiltered.filter(producto => producto.precioVenta >= 0 && producto.precioVenta <= 3000)
-            break
-          case Precios['Entre 3000 y 5000']:
-            productosFiltered = productosFiltered.filter(producto => producto.precioVenta >= 3000 && producto.precioVenta <= 5000)
-            break
-          case Precios['Entre 5000 y 10000']:
-            productosFiltered = productosFiltered.filter(producto => producto.precioVenta >= 5000 && producto.precioVenta <= 10000)
-            break
-          case Precios['Más de 10000']:
-            productosFiltered = productosFiltered.filter(producto => producto.precioVenta >= 10000)
-            break
-          default:
-            break
-        }
+        productosFiltered = productosFiltered.filter(producto => {
+          switch (precio) {
+            case Precios['Todos']:
+              return true;
+            case Precios['Entre 0 y 3000']:
+              return producto.precioVenta >= 0 && producto.precioVenta <= 3000;
+            case Precios['Entre 3000 y 5000']:
+              return producto.precioVenta >= 3000 && producto.precioVenta <= 5000;
+            case Precios['Entre 5000 y 10000']:
+              return producto.precioVenta >= 5000 && producto.precioVenta <= 10000;
+            case Precios['Más de 10000']:
+              return producto.precioVenta >= 10000;
+            default:
+              return true;
+          }
+        });
       }
-      state.productosFiltered = productosFiltered
+    
+      state.productosFiltered = productosFiltered;
     },
     clearFilters: (state) => {
       state.productosFiltered = state.productos;

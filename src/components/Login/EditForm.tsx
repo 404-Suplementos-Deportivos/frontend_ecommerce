@@ -106,9 +106,9 @@ const EditForm = () => {
     paginaLista ? (
       <div className="md:w-3/4 z-20 flex flex-col">
         <div className="w-full flex justify-end">
-        <Checkbox color="success" size="sm" onChange={() => setEditar(!editar)} isSelected={editar}>
-          Editar datos
-        </Checkbox>
+          <Checkbox color="success" size="sm" onChange={() => setEditar(!editar)} isSelected={editar}>
+            Editar datos
+          </Checkbox>
         </div>
         <div className="mt-6">
           <Input

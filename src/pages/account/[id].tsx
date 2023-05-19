@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import { Modal, Button, Text, Row } from "@nextui-org/react";
 import Layout from "@/components/Layout/Layout"
 import Loader from "@/components/Layout/Navbar/Loader"
 import EditForm from '@/components/Login/EditForm'
@@ -8,7 +9,7 @@ import ChangePassword from "@/components/Login/ChangePassword"
 import Orders from "@/components/Login/Orders"
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore"
 import { useProtectedRoute } from "@/hooks/useProtectedRoute"
-import { getUserAsync } from "@/store/features/user/userSlice"
+import { getUserAsync, deleteUserAsync } from "@/store/features/user/userSlice"
 import { showToast } from "@/store/features/design/designSlice"
 import { cleanCart } from "@/store/features/product/cartSlice"
 import { saveComprobante, getComprobantes } from "@/services/billing/billingService"
@@ -30,6 +31,12 @@ export default function EditPage() {
   const { usuario, error, loading: loadingUser } = useAppSelector(state => state.user)
   const { isAuth, loading: loadingAuth } = useAppSelector(state => state.auth)
   const [comprobantes, setComprobantes] = useState<EditPageState['comprobantes']>([])
+  const [visible, setVisible] = useState(false);
+  const handler = () => setVisible(true);
+  const closeHandler = () => {
+    setVisible(false);
+    console.log("closed");
+  }
 
   const { view, id, payment_id } = router.query // view = profile, password, orders or undefinedw
 
@@ -68,6 +75,10 @@ export default function EditPage() {
       dispatch(showToast(error))
     }
   }, [error, dispatch]);
+
+  const deleteUserHandler = async () => {
+    await dispatch(deleteUserAsync(id as string))
+  }
 
   const guardarComprobante = async (idOrden: string) => {
     try {
@@ -113,18 +124,48 @@ export default function EditPage() {
   return (
     !loadingUser && !loadingAuth && isAuth ? (
       <Layout title='Editar perfil' description='Editar perfil'>
-        <div className='mx-auto py-4 w-5/6 md:grid md:grid-cols-5 min-h-[calc(100vh-20rem)]'>
-          <div className='md:col-span-2 flex flex-col'>
+        <div className='mx-auto py-4 w-5/6 md:grid md:grid-cols-5 xl:grid-cols-7 min-h-[calc(100vh-20rem)]'>
+          <aside className='md:col-span-2 xl:col-span-2 flex flex-col md:sticky md:top-28 md:h-fit'>
             <Link href={`/account/${id}?view=${Views.PROFILE}`} className={`w-fit ${view === Views.PROFILE && 'font-black text-verde'}`}>Editar perfil</Link>
             <Link href={`/account/${id}?view=${Views.PASSWORD}`} className={`w-fit ${view === Views.PASSWORD && 'font-black text-verde'}`}>Cambiar contraseña</Link>
             <Link href={`/account/${id}?view=${Views.ORDERS}`} className={`w-fit ${view === Views.ORDERS && 'font-black text-verde'}`}>Historial de Compras</Link>
-          </div>
-          <div className="md:col-span-3 mt-6 md:mt-0">
+            <button onClick={handler} className='w-fit text-rojo'>Eliminar cuenta</button>
+          </aside>
+          <div className="md:col-span-3 xl:col-span-5 mt-6 md:mt-0">
             {view === Views.PROFILE && <EditForm />}
             {view === Views.PASSWORD && <ChangePassword />}
             {view === Views.ORDERS && <Orders comprobantes={comprobantes} />}
           </div>
         </div>
+        <Modal
+          closeButton
+          preventClose
+          aria-labelledby="modal-title"
+          open={visible}
+          onClose={closeHandler}
+        >
+          <Modal.Header>
+            <Text h3 id="modal-title" size={22}>
+              Eliminar cuenta
+            </Text>
+          </Modal.Header>
+          <Modal.Body>
+            <Text id="modal-title" size={18}>
+              ¿Estás seguro que deseas {''}
+              <Text b size={18} className="text-rojo">
+                eliminar tu cuenta?
+              </Text>
+            </Text>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button auto flat color="error" onPress={closeHandler} className='bg-rojo/90 text-blanco'>
+              Cancelar
+            </Button>
+            <Button auto onPress={deleteUserHandler} className='bg-verde/90 text-blanco'>
+              Si, estoy seguro
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Layout>
     ) : (
       <Layout title='Editar perfil' description='Editar perfil'>
