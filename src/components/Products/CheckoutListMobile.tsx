@@ -10,19 +10,6 @@ const CheckoutListMobile = () => {
 
   return (
     <>
-      <div className="mt-4 grid grid-cols-5">
-        <div className="col-span-2">
-          <p className="font-bold">Producto</p>
-        </div>
-        <div className="col-span-1 text-center">
-          <p className="font-bold">Cantidad</p>
-        </div>
-        <div className="col-span-1 text-center">
-          <p className="font-bold">Subtotal</p>
-        </div>
-        <div className="col-span-1">
-        </div>
-      </div>
       {items.map(item => (
         <CartCard key={item.id} item={item} />
       ))}
