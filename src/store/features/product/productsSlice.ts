@@ -70,7 +70,7 @@ export const productsSlice = createSlice({
       state.loading = true
     },
     getProductsSuccess: (state, action: PayloadAction<Producto[]>) => {
-      state.productos = action.payload
+      state.productos = action.payload.filter(producto => producto.estado)
       state.loading = false
     },
     getProductsError: (state, action: PayloadAction<string>) => {
@@ -98,7 +98,7 @@ export const productsSlice = createSlice({
       state.loading = true
     },
     getCategoriesSuccess: (state, action: PayloadAction<Categoria[]>) => {
-      state.categorias = action.payload
+      state.categorias = action.payload.filter(categoria => categoria.estado)
       state.loading = false
     },
     getCategoriesError: (state, action: PayloadAction<string>) => {
@@ -112,7 +112,7 @@ export const productsSlice = createSlice({
       state.loading = true
     },
     getSubcategoriesSuccess: (state, action: PayloadAction<Subcategoria[]>) => {
-      state.subcategorias = action.payload
+      state.subcategorias = action.payload.filter(subcategoria => subcategoria.estado)
       state.loading = false
     },
     getSubcategoriesError: (state, action: PayloadAction<string>) => {
@@ -232,7 +232,7 @@ export const getProductsAsync = (filters: Filters) => async (dispatch: any) => {
     const products = await getProducts(filters)
     dispatch(getProductsSuccess(products))
   } catch (error: any) {
-    dispatch(getProductsError(error.response.data.message))
+    dispatch(getProductsError(error.response?.data?.message ?? 'Error al obtener los productos'))
   }
 }
 
@@ -242,7 +242,7 @@ export const getProductAsync = (id: number) => async (dispatch: any) => {
     const product = await getProduct(id)
     dispatch(getProductSuccess(product))
   } catch (error: any) {
-    dispatch(getProductError(error.response.data.message))
+    dispatch(getProductError(error.response?.data?.message ?? 'Error al obtener el producto'))
   }
 }
 
@@ -252,7 +252,7 @@ export const getCategoriesAsync = () => async (dispatch: any) => {
     const categories = await getCategories()
     dispatch(getCategoriesSuccess(categories))
   } catch (error: any) {
-    dispatch(getCategoriesError(error.response.data.message))
+    dispatch(getCategoriesError(error.response?.data?.message ?? 'Error al obtener las categorías'))
   }
 }
 
@@ -262,6 +262,6 @@ export const getSubcategoriesAsync = (id: number) => async (dispatch: any) => {
     const subcategories = await getSubcategories(id)
     dispatch(getSubcategoriesSuccess(subcategories))
   } catch (error: any) {
-    dispatch(getSubcategoriesError(error.response.data.message))
+    dispatch(getSubcategoriesError(error.response?.data?.message ?? 'Error al obtener las subcategorías'))
   }
 }

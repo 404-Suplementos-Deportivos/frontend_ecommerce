@@ -83,10 +83,10 @@ export const getProfileAsync = () => async (dispatch: any) => {
     const response = await getProfile()
     dispatch(getProfileSuccess(response))
   } catch (error: any) {
-    dispatch(getProfileError(error.response.data.message))
+    dispatch(getProfileError(error.response?.data?.message ?? 'Error al obtener el perfil del usuario'))
     dispatch(showToast({
       type: 'error',
-      message: error.response.data.message
+      message: error.response?.data?.message ?? 'Error al obtener el perfil del usuario'
     }))
   }
 }

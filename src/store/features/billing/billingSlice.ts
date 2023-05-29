@@ -57,10 +57,10 @@ export const createComprobanteAsync = (comprobante: Comprobante) => async (dispa
     const response = await createComprobante(comprobante)
     dispatch(getBillingSuccess(response))
   } catch (error: any) {
-    dispatch(getBillingError(error.response.data.message))
+    dispatch(getBillingError(error.response?.data?.message ?? 'Error al crear el comprobante'))
     dispatch(showToast({
       type: 'error',
-      message: error.response.data.message
+      message: error.response?.data?.message ?? 'Error al crear el comprobante'
     }))
   }
 }

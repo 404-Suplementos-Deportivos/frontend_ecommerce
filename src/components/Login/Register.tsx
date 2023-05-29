@@ -58,12 +58,12 @@ const Register = ({closeHandler}: RegisterProps) => {
       closeHandler()
       dispatch(showToast({
         type: 'success',
-        message: data.message
+        message: data?.message ?? 'Usuario registrado correctamente'
       }))
     } catch (error: any) {
       dispatch(showToast({
         type: 'error',
-        message: error.response.data.message
+        message: error.response?.data?.message ?? 'Error al registrar el usuario'
       }))
     } finally {
       setLoading(false)

@@ -28,7 +28,7 @@ export default function ConfirmAccount() {
           const data = await confirmAccount(token as string)
           dispatch(showToast({
             type: 'success',
-            message: data.message
+            message: data?.message ?? 'Cuenta confirmada con éxito'
           }))
           setTimeout(() => {
             router.push('/')
@@ -36,7 +36,7 @@ export default function ConfirmAccount() {
         } catch (error: any) {
           dispatch(showToast({
             type: 'error',
-            message: error.response.data.message
+            message: error.response?.data?.message ?? 'Error al confirmar cuenta'
           }))
           setError(true)
         }
@@ -50,7 +50,7 @@ export default function ConfirmAccount() {
       const data = await resetToken(email)
       dispatch(showToast({
         type: 'success',
-        message: data.message
+        message: data?.message ?? 'Correo reenviado con éxito'
       }))
       setTimeout(() => {
         router.push('/')
@@ -58,7 +58,7 @@ export default function ConfirmAccount() {
     } catch (error: any) {
       dispatch(showToast({
         type: 'error',
-        message: error.response.data.message
+        message: error.response?.data?.message ?? 'Error al reenviar correo'
       }))
     } finally {
       setEmail('')

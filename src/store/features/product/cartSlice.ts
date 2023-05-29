@@ -197,7 +197,7 @@ export const getCartData = (authenticated: boolean) => async (dispatch: any) => 
     } catch (error: any) {
       dispatch(showToast({
         type: 'error',
-        message: error.response.data.message
+        message: error.response?.data?.message ?? 'Error al obtener el carrito'
       }))
     }
   } else {

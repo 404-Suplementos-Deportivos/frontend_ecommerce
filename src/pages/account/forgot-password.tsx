@@ -36,12 +36,12 @@ export default function ConfirmAccount() {
           const data = await validateToken(token as string)
           dispatch(showToast({
             type: 'success',
-            message: data.message
+            message: data?.message ?? 'Token validado con éxito'
           }))
         } catch (error: any) {
           dispatch(showToast({
             type: 'error',
-            message: error.response.data.message
+            message: error.response?.data?.message ?? 'Error al confirmar cuenta'
           }))
         }
       }
@@ -55,7 +55,7 @@ export default function ConfirmAccount() {
       const data = await resetPassword(email)
       dispatch(showToast({
         type: 'success',
-        message: data.message
+        message: data?.message ?? 'Correo reenviado con éxito'
       }))
       setTimeout(() => {
         router.push('/')
@@ -63,7 +63,7 @@ export default function ConfirmAccount() {
     } catch (error: any) {
       dispatch(showToast({
         type: 'error',
-        message: error.response.data.message
+        message: error.response?.data?.message ?? 'Error al confirmar cuenta'
       }))
     } finally {
       setEmail('')
@@ -76,7 +76,7 @@ export default function ConfirmAccount() {
       const data = await changePassword(token as string, password)
       dispatch(showToast({
         type: 'success',
-        message: data.message
+        message: data?.message ?? 'Contraseña cambiada con éxito'
       }))
       setTimeout(() => {
         router.push('/')
@@ -84,7 +84,7 @@ export default function ConfirmAccount() {
     } catch (error: any) {
       dispatch(showToast({
         type: 'error',
-        message: error.response.data.message
+        message: error.response?.data?.message ?? 'Error al confirmar cuenta'
       }))
     } finally {
       setPassword('')

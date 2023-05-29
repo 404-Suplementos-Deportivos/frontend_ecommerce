@@ -30,7 +30,7 @@ export default function Checkout() {
     if(comprobante.message) {
       dispatch(showToast({
         type: 'success',
-        message: comprobante.message
+        message: comprobante?.message ?? ''
       }))
       setTimeout(() => {
         router.push(comprobante.init_point as string)

@@ -121,7 +121,7 @@ export const getUserAsync = (id: string) => async (dispatch: any) => {
     const usuario = await getUser(id)
     dispatch(getUserSuccess(usuario))
   } catch (error: any) {
-    dispatch(getUserError(error.response.data.message))
+    dispatch(getUserError(error.response?.data?.message ?? 'Error al obtener el usuario'))
   } 
 }
 
@@ -131,7 +131,7 @@ export const updateUserAsync = (usuario: Usuario) => async (dispatch: any) => {
     const updatedUser = await updateUser(usuario)
     dispatch(updateUserSuccess(updatedUser))
   } catch (error: any) {
-    dispatch(updateUserError(error.response.data.message))
+    dispatch(updateUserError(error.response?.data?.message ?? 'Error al actualizar el usuario'))
   } 
 }
 
@@ -142,13 +142,13 @@ export const changePasswordAsync = (password: string) => async (dispatch: any) =
     dispatch(changePasswordSuccess(response.message))
     dispatch(showToast({
       type: 'success',
-      message: response.message
+      message: response?.message ?? 'Contraseña cambiada correctamente'
     }))
   } catch (error: any) {
-    dispatch(changePasswordError(error.response.data.message))
+    dispatch(changePasswordError(error.response?.data?.message ?? 'Error al cambiar la contraseña'))
     dispatch(showToast({
       type: 'error',
-      message: error.response.data.message
+      message: error.response?.data?.message ?? 'Error al cambiar la contraseña'
     }))
   }
 }
@@ -160,17 +160,17 @@ export const deleteUserAsync = (id: string) => async (dispatch: any) => {
     dispatch(deleteUserSuccess(response.message))
     dispatch(showToast({
       type: 'success',
-      message: response.message
+      message: response?.message ?? 'Usuario eliminado correctamente'
     }))
     // Cerrar sesión
     dispatch(clearUsuarioAuth())
     // Redireccionar a /
     window.location.href = '/'
   } catch (error: any) {
-    dispatch(deleteUserError(error.response.data.message))
+    dispatch(deleteUserError(error.response?.data?.message ?? 'Error al eliminar el usuario'))
     dispatch(showToast({
       type: 'error',
-      message: error.response.data.message
+      message: error.response?.data?.message ?? 'Error al eliminar el usuario'
     }))
   } 
 }

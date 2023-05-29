@@ -86,21 +86,20 @@ export default function EditPage() {
       if(response.data === 'approved') {
         dispatch(showToast({
           type: 'success',
-          message: response.message
+          message: response?.message ?? 'Comprobante guardado correctamente'
         }))
         dispatch(cleanCart())
         obtenerComprobantes()
       } else {
         dispatch(showToast({
           type: 'error',
-          message: response.message
+          message: response?.message ?? 'Error al guardar el comprobante'
         }))
       }
     } catch (error: any) {
-      console.log( error.response.data.message )
       dispatch(showToast({
         type: 'error',
-        message: error.response.data.message
+        message: error.response?.data?.message ?? 'Error al guardar el comprobante'
       }))
     } finally {
       // Cargar ordenes
@@ -113,10 +112,9 @@ export default function EditPage() {
       const response = await getComprobantes()
       setComprobantes(response.data)
     } catch (error: any) {
-      console.log( error.response.data.message )
       dispatch(showToast({
         type: 'error',
-        message: error.response.data.message
+        message: error.response?.data?.message ?? 'Error al obtener los comprobantes'
       }))
     }
   }
