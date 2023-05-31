@@ -32,7 +32,9 @@ interface ProductsState {
   precio: string,
   producto: Producto
   categorias: Categoria[],
+  categoriasFilters: Categoria[],
   subcategorias: Subcategoria[],
+  subcategoriasFilters: Subcategoria[],
   loading: boolean,
   error: {
     type: Error,
@@ -51,7 +53,9 @@ const INITIAL_STATE: ProductsState = {
   precio: Precios['Todos'],
   producto: {} as Producto,
   categorias: [],
+  categoriasFilters: [],
   subcategorias: [],
+  subcategoriasFilters: [],
   loading: false,
   error: {
     type: 'info',
@@ -108,6 +112,20 @@ export const productsSlice = createSlice({
         message: action.payload
       }
     },
+    getCategoriasFiltersStart: (state) => {
+      state.loading = true
+    },
+    getCategoriasFiltersSuccess: (state, action: PayloadAction<Categoria[]>) => {
+      state.categoriasFilters = action.payload.filter(categoria => categoria.estado)
+      state.loading = false
+    },
+    getCategoriasFiltersError: (state, action: PayloadAction<string>) => {
+      state.loading = false
+      state.error = {
+        type: 'error',
+        message: action.payload
+      }
+    },
     getSubcategoriesStart: (state) => {
       state.loading = true
     },
@@ -116,6 +134,20 @@ export const productsSlice = createSlice({
       state.loading = false
     },
     getSubcategoriesError: (state, action: PayloadAction<string>) => {
+      state.loading = false
+      state.error = {
+        type: 'error',
+        message: action.payload
+      }
+    },
+    getSubcategoriasFiltersStart: (state) => {
+      state.loading = true
+    },
+    getSubcategoriasFiltersSuccess: (state, action: PayloadAction<Subcategoria[]>) => {
+      state.subcategoriasFilters = action.payload.filter(subcategoria => subcategoria.estado)
+      state.loading = false
+    },
+    getSubcategoriasFiltersError: (state, action: PayloadAction<string>) => {
       state.loading = false
       state.error = {
         type: 'error',
@@ -211,9 +243,15 @@ export const {
   getCategoriesStart,
   getCategoriesSuccess,
   getCategoriesError,
+  getCategoriasFiltersStart,
+  getCategoriasFiltersSuccess,
+  getCategoriasFiltersError,
   getSubcategoriesStart,
   getSubcategoriesSuccess,
   getSubcategoriesError,
+  getSubcategoriasFiltersStart,
+  getSubcategoriasFiltersSuccess,
+  getSubcategoriasFiltersError,
   setCategoriaSelectedURL,
   setSubcategoriaSelectedURL,
   setProductsFiltered,
@@ -263,5 +301,25 @@ export const getSubcategoriesAsync = (id: number) => async (dispatch: any) => {
     dispatch(getSubcategoriesSuccess(subcategories))
   } catch (error: any) {
     dispatch(getSubcategoriesError(error.response?.data?.message ?? 'Error al obtener las subcategorías'))
+  }
+}
+
+export const getCategoriesFiltersAsync = () => async (dispatch: any) => {
+  dispatch(getCategoriasFiltersStart())
+  try {
+    const categories = await getCategories()
+    dispatch(getCategoriasFiltersSuccess(categories))
+  } catch (error: any) {
+    dispatch(getCategoriasFiltersError(error.response?.data?.message ?? 'Error al obtener las categorías'))
+  }
+}
+
+export const getSubcategoriesFiltersAsync = (id: number) => async (dispatch: any) => {
+  dispatch(getSubcategoriasFiltersStart())
+  try {
+    const subcategories = await getSubcategories(id)
+    dispatch(getSubcategoriasFiltersSuccess(subcategories))
+  } catch (error: any) {
+    dispatch(getSubcategoriasFiltersError(error.response?.data?.message ?? 'Error al obtener las subcategorías'))
   }
 }

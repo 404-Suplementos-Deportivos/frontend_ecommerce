@@ -8,8 +8,8 @@ import IconoProte from 'public/icons/icons8-protein-supplement-96.png';
 import { useAppSelector, useAppDispatch } from "@/hooks/useReduxStore";
 import {
   getProductsAsync,
-  getCategoriesAsync,
-  getSubcategoriesAsync,
+  getCategoriesFiltersAsync,
+  getSubcategoriesFiltersAsync,
   setCategoriaSelectedURL,
   setSubcategoriaSelectedURL,
   setProductsFiltered
@@ -17,22 +17,23 @@ import {
 import { toggleNavbar } from "@/store/features/design/designSlice";
 
 export default function Products() {
-  const { productos, productosFiltered, categorias, subcategorias, loading, error } = useAppSelector(state => state.productos);
+  const { productos, productosFiltered, categoriasFilters, subcategoriasFilters, loading, error } = useAppSelector(state => state.productos);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { categoriaSelected, subcategoriaSelected } = router.query;
 
   useEffect(() => {
     dispatch(toggleNavbar(false));
-    dispatch(getCategoriesAsync());
-  }, [dispatch]);
+    dispatch(getCategoriesFiltersAsync());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
       if (categoriaSelected || subcategoriaSelected) {
         dispatch(setCategoriaSelectedURL(categoriaSelected?.toString()));
         dispatch(setSubcategoriaSelectedURL(subcategoriaSelected?.toString()));
-        await dispatch(getSubcategoriesAsync(Number(categoriaSelected)));
+        await dispatch(getSubcategoriesFiltersAsync(Number(categoriaSelected)));
         await dispatch(getProductsAsync({ categoria: categoriaSelected?.toString(), subcategoria: subcategoriaSelected?.toString() }));
       } else {
         dispatch(setCategoriaSelectedURL(undefined));
@@ -42,11 +43,13 @@ export default function Products() {
     };
 
     loadData();
-  }, [categoriaSelected, subcategoriaSelected, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoriaSelected, subcategoriaSelected]);
 
   useEffect(() => {
     dispatch(setProductsFiltered(productos));
-  }, [productos, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productos]);
 
   const noProductosMessage = productosFiltered.length === 0 && !loading && (
     <div className="flex flex-col md:flex-row justify-center items-center h-60 py-6">
@@ -63,15 +66,15 @@ export default function Products() {
       <div className="mx-auto w-5/6">
         <h3 className="text-2xl font-bold text-grisOscuro my-5">Nuestros productos</h3>
         <div>
-          {categorias && subcategorias && (
+          {categoriasFilters && subcategoriasFilters && (
             <Filters
-              categorias={categorias}
-              subcategorias={subcategorias}
+              categorias={categoriasFilters}
+              subcategorias={subcategoriasFilters}
             />
           )}
         </div>
         <List productos={productosFiltered} />
-        {error && <p className="text-red-500">{error.message}</p>}
+        {/* {error && <p className="text-red-500">{error.message}</p>} */}
         {noProductosMessage}
       </div>
     </Layout>

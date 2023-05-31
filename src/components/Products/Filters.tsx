@@ -6,7 +6,7 @@ import { Categoria } from '@/interfaces/Categoria'
 import { Subcategoria } from '@/interfaces/Subcategoria'
 import { useAppSelector, useAppDispatch } from '@/hooks/useReduxStore'
 import { 
-  getSubcategoriesAsync, 
+  getSubcategoriesFiltersAsync, 
   setSearch,
   setOrder,
   setPrecio,
@@ -89,9 +89,10 @@ const Filters = ({categorias, subcategorias}: FiltersProps) => {
 
   useEffect(() => {
     if (filter.categoriaSelected) {
-      dispatch(getSubcategoriesAsync(Number(filter.categoriaSelected)))
+      dispatch(getSubcategoriesFiltersAsync(Number(filter.categoriaSelected)))
     }
-  }, [filter.categoriaSelected, dispatch])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter.categoriaSelected])
 
   useEffect(() => {
     dispatch(filterProducts())
