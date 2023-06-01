@@ -2,13 +2,17 @@ import React from 'react'
 
 const TerminosCondiciones = () => {
   return (
-    <div>
+    <section>
       <h1 className='text-2xl font-bold'>Términos y Condiciones del Ecommerce de Gimnasio y Suplementos Deportivos</h1>
       <p className='text-justify'>
-        ¡Bienvenido(a) a nuestro ecommerce de productos de gimnasio y suplementos deportivos! Antes de utilizar nuestros servicios, 
+        ¡Bienvenido(a) a <b>404 ecommerce de productos de gimnasio y suplementos deportivos</b>! Antes de utilizar nuestros servicios, 
         te pedimos que leas detenidamente los siguientes términos y condiciones, ya que establecen los derechos y obligaciones tanto para ti como cliente, 
         como para nosotros como proveedores de los productos. Al utilizar nuestro sitio web y realizar una compra, aceptas estos términos 
         y condiciones en su totalidad.
+      </p>
+      <p className="text-justify">
+        Si utiliza el servicio está aceptando las modalidades operativas en vigencia descriptas más adelante, las declara conocer y aceptar, las que se 
+        habiliten en el futuro y en los términos y condiciones que a continuación se detallan:
       </p>
       <ol className='list-decimal list-inside mt-5'>
         <li className='text-justify'>
@@ -20,6 +24,14 @@ const TerminosCondiciones = () => {
           <p className='text-justify'>
             Las imágenes de los productos son ilustrativas y pueden variar ligeramente en comparación con el producto real. Nos reservamos el derecho de realizar 
             cambios o correcciones en cualquier momento sin previo aviso.
+          </p>
+        </li>
+
+        <li className='text-justify'>
+          <span className='font-bold'>Coste del servicio:</span> 
+          <p className='text-justify'>
+            La empresa <b>404</b> no cobrará comisiones por el mantenimiento y/o uso de este servicio o los que en el futuro implemente. 
+            En caso de cualquier modificación a la presente previsión, lo comunicará con al menos 60 días de antelación.
           </p>
         </li>
 
@@ -60,7 +72,8 @@ const TerminosCondiciones = () => {
           <p className='text-justify'>
             Todos los derechos de propiedad intelectual, incluyendo pero no limitados a marcas registradas, logotipos, imágenes y contenido textual presentes en nuestro sitio web, son propiedad 
             exclusiva de sus respectivos propietarios. Queda prohibida cualquier forma de reproducción, distribución, o uso no autorizado de dichos materiales sin el consentimiento previo 
-            por escrito de los propietarios correspondientes.
+            por escrito de los propietarios correspondientes. El software en Argentina está protegido por la ley 11.723, que regula la propiedad intelectual y los derechos de autor de todos 
+            aquellos creadores de obras artísticas, literarias y científicas.
           </p>
         </li>
 
@@ -85,7 +98,9 @@ const TerminosCondiciones = () => {
           <span className='font-bold'>Privacidad y Protección de Datos:</span>
           <p className='text-justify'>
             Nos comprometemos a proteger tu privacidad y a tratar tus datos personales de acuerdo con las leyes y regulaciones aplicables. Para obtener más información sobre cómo recopilamos, 
-            utilizamos y protegemos tus datos personales, consulta nuestra Política de Privacidad.
+            utilizamos y protegemos tus datos personales. Para utilizar los Servicios ofrecidos por <b>404</b>, los usuarios deberán facilitar determinados datos de carácter personal. Su información 
+            personal se procesa y almacena en servidores o medios magnéticos que mantienen altos estándares de seguridad y protección tanto física como tecnológica. Para mayor información sobre la 
+            privacidad de los Datos Personales y casos en los que será revelada la información personal, se pueden consultar nuestras políticas de privacidad.
           </p>
         </li>
 
@@ -102,7 +117,7 @@ const TerminosCondiciones = () => {
         ¡Gracias por elegir nuestro ecommerce de productos de gimnasio y suplementos deportivos! Si tienes alguna pregunta adicional o necesitas asistencia, no dudes en contactarnos a través de los canales de 
         comunicación proporcionados en nuestro sitio web. Estamos aquí para ayudarte y brindarte una excelente experiencia de compra.
       </p>
-    </div>
+    </section>
   )
 }
 

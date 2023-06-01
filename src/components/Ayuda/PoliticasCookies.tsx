@@ -2,12 +2,11 @@ import React from 'react'
 
 const PoliticasCookies = () => {
   return (
-    <div>
+    <section>
       <h1 className='text-2xl font-bold'>Políticas de Cookies del Ecommerce de Gimnasio y Suplementos Deportivos</h1>
       <p className='text-justify'>
-        Nuestro ecommerce de productos de gimnasio y suplementos deportivos utiliza cookies y tecnologías similares para mejorar tu experiencia de 
-        usuario y proporcionarte un sitio web más personalizado. Esta Política de Cookies describe cómo utilizamos las cookies y cómo puedes controlar 
-        su uso al visitar nuestro sitio. Al utilizar nuestro sitio web, aceptas el uso de cookies de acuerdo con esta política.
+        Nuestro ecommerce de productos de gimnasio y suplementos deportivos no utiliza cookies o tecnologías similares para almacenar información del 
+        usuario y proporcionarte un sitio web más personalizado.
       </p>
       <ol className='list-decimal list-inside mt-5'>
         <li className='text-justify'>
@@ -19,7 +18,7 @@ const PoliticasCookies = () => {
         </li>
 
         <li className='text-justify'>
-          <span className='font-bold'>Tipos de cookies que utilizamos:</span> 
+          <span className='font-bold'>Tipos de cookies existenes:</span> 
           <p className='text-justify'>
             Utilizamos tanto cookies propias como cookies de terceros en nuestro sitio web con los siguientes propósitos:
           </p>
@@ -72,15 +71,14 @@ const PoliticasCookies = () => {
           <p className='text-justify'>
             Puedes controlar y administrar las cookies utilizando la configuración de tu navegador. La mayoría de los navegadores te permiten rechazar o aceptar cookies, 
             así como eliminar las cookies existentes. Ten en cuenta que si deshabilitas o eliminas ciertas cookies, es posible que algunas funciones y características 
-            de nuestro sitio web no funcionen correctamente.
+            de algunos sitios web no funcionen correctamente.
           </p>
         </li>
 
         <li className='text-justify'>
           <span className='font-bold'>Consentimiento:</span> 
           <p className='text-justify'>
-            Al visitar nuestro sitio web por primera vez, se te solicitará tu consentimiento para el uso de cookies de acuerdo con esta política. Al continuar utilizando nuestro sitio, 
-            entenderemos que aceptas el uso de cookies de acuerdo con esta política, a menos que las hayas deshabilitado en la configuración de tu navegador.
+            Al visitar un sitio web por primera vez, se te solicitará tu consentimiento para el uso de cookies de acuerdo con esta política.
           </p>
         </li>
 
@@ -96,7 +94,7 @@ const PoliticasCookies = () => {
       <p className='text-justify mt-5'>
         Si tienes alguna pregunta o inquietud sobre nuestra Política de Cookies, no dudes en contactarnos utilizando los medios proporcionados en nuestro sitio web.
       </p>
-    </div>
+    </section>
   )
 }
 

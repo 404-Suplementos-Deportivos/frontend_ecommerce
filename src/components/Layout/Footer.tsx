@@ -10,9 +10,9 @@ const Footer = () => {
             <ul className="list-none text-grisMuyClaro">
               <li className="mb-1"><Link href={'/'}>Inicio</Link></li>
               <li className="mb-1"><Link href={'/products'}>Productos</Link></li>
-              <li className="mb-1"><Link href={'/'}>Servicios</Link></li>
-              <li className="mb-1"><Link href={'/'}>Acerca de nosotros</Link></li>
-              <li className="mb-1"><Link href={'/'}>Contacto</Link></li>
+              <li className="mb-1"><Link href={'/ayuda?view=terminos'}>Servicios</Link></li>
+              <li className="mb-1"><Link href={'/ayuda?view=preguntas'}>Acerca de nosotros</Link></li>
+              <li className="mb-1"><Link href={'/ayuda?view=preguntas'}>Contacto</Link></li>
             </ul>
           </div>
           <div className="w-full sm:w-1/3">
@@ -20,7 +20,7 @@ const Footer = () => {
             <ul className="list-none text-grisMuyClaro">
               <li className="mb-1">Dirección: Calle Falsa 123</li>
               <li className="mb-1">Teléfono: <a href="tel:600123456">555-1234</a></li>
-              <li className="mb-1">Email: info@404.com</li>
+              <li className="mb-1">Email: <a href="mailto:404suplementosdeportivos@gmail.com">404suplementosdeportivos@gmail.com</a></li>
             </ul>
           </div>
           <div className="w-full sm:w-1/3">
@@ -41,6 +41,7 @@ const Footer = () => {
               <li className="mr-4"><Link href={'/ayuda?view=terminos'}>Términos y condiciones</Link></li>
               <li className="mr-4"><Link href={'/ayuda?view=privacidad'}>Política de privacidad</Link></li>
               <li className="mr-4"><Link href={'/ayuda?view=cookies'}>Política de cookies</Link></li>
+              <li className="mr-4"><Link href={'/ayuda?view=preguntas'}>Preguntas frecuentes</Link></li>
             </ul>
           </div>
         </div>

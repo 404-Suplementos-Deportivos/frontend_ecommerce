@@ -2,7 +2,7 @@ import React from 'react'
 
 const PoliticasPrivacidad = () => {
   return (
-    <div>
+    <section>
       <h1 className='text-2xl font-bold'>Políticas de Privacidad del Ecommerce de Gimnasio y Suplementos Deportivos</h1>
       <p className='text-justify'>
         En nuestro ecommerce de productos de gimnasio y suplementos deportivos, nos comprometemos a proteger tu privacidad y a garantizar la seguridad de la 
@@ -110,7 +110,7 @@ const PoliticasPrivacidad = () => {
           </p>
         </li>
       </ol>
-    </div>
+    </section>
   )
 }
 
