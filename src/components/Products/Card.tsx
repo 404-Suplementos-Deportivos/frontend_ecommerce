@@ -17,7 +17,7 @@ const Card = ({producto}: CardProps) => {
       </div>
       <div className="w-full h-[200] p-2 flex flex-row justify-between items-end absolute left-0 right-0 bottom-0">
         <p className="text-sm text-grisMuyClaro font-bold w-3/5">{nombre}</p>
-        <p className="text-sm text-grisMuyClaro font-bold ">${precioVenta}</p>
+        <p className="text-sm text-grisMuyClaro font-bold ">${precioVenta?.toFixed(2)}</p>
       </div>
     </Link>
   )

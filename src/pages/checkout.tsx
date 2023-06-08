@@ -43,7 +43,7 @@ export default function Checkout() {
     const pedido: DetalleComprobante[] = items.map(item => {
       return {
         cantidad: item.cantidad as number,
-        precio: item.precioVenta as number,
+        precio: Number(item.precioVenta.toFixed(2)) as number,
         descuento: 0 as number,
         idProducto: item.id as number,
         nombreProducto: item.nombre as string

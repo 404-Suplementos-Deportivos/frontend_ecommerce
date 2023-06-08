@@ -42,7 +42,7 @@ const Orders = ({comprobantes}: OrdersProps) => {
                   <div>
                     <Text>
                       <Text b>Precio: </Text>
-                      ${detalle.precio}
+                      ${detalle.precio.toFixed(2)}
                     </Text>
                     <Text>
                       <Text b>Cantidad: </Text>
@@ -50,7 +50,7 @@ const Orders = ({comprobantes}: OrdersProps) => {
                     </Text>
                     <Text>
                       <Text b>Subtotal: </Text>
-                      ${detalle.precio * detalle.cantidad}
+                      ${(detalle.precio * detalle.cantidad).toFixed(2)}
                     </Text>
                   </div>
                 </div>
@@ -58,7 +58,7 @@ const Orders = ({comprobantes}: OrdersProps) => {
             </Text>
             <Text className='mt-3 text-2xl'>
               <Text b>Total: </Text>
-              ${comprobante.detalleComprobante.reduce((acc, curr) => acc + (curr.precio * curr.cantidad), 0)}
+              ${comprobante.detalleComprobante.reduce((acc, curr) => acc + (curr.precio * curr.cantidad), 0).toFixed(2)}
             </Text>
           </Collapse>
         ))}

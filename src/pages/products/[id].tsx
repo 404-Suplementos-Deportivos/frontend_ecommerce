@@ -72,7 +72,7 @@ export default function Producto() {
             <div className="w-full md:w-1/2">
               <h3 className="text-2xl font-bold text-grisOscuro my-5">{nombre}</h3>
               <p className="text-grisOscuro">{descripcion}</p>
-              <p className="text-grisOscuro font-extrabold mt-6 text-xl">Precio: <span className="font-normal">${precioVenta}</span></p>
+              <p className="text-grisOscuro font-extrabold mt-6 text-xl">Precio: <span className="font-normal">${precioVenta?.toFixed(2)}</span></p>
               <div className="flex flex-col">
                 <div className="w-full md:w-1/2">
                   {stock <= 0 && <p className="text-rojo">No hay stock disponible</p>}

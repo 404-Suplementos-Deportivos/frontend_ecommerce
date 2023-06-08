@@ -29,7 +29,7 @@ const CheckoutListDesktop = () => {
             <Image src={item.urlImagen} className='object-fill' alt='Imagen Producto' width={140} height={140} />
             <div>
               <p className="font-bold">{item.nombre}</p>
-              <p className="font-light">${item.precioVenta}</p>
+              <p className="font-light">${item.precioVenta.toFixed(2)}</p>
             </div>
           </div>
           <div className="col-span-1 flex flex-row gap-3 items-center justify-center">
@@ -50,7 +50,7 @@ const CheckoutListDesktop = () => {
             />
           </div>
           <div className="col-span-1 flex flex-row gap-3 items-center justify-center">
-            <p>${item.subTotal}</p>
+            <p>${item.subTotal?.toFixed(2)}</p>
           </div>
           <div className="col-span-1 flex flex-row gap-3 items-center justify-end">
             <XMarkIcon
@@ -67,7 +67,7 @@ const CheckoutListDesktop = () => {
         <div className="flex flex-col w-fit">
           <div className="flex flex-row justify-between gap-4">
             <p className="font-bold">Subtotal</p>
-            <p className="font-light">${total}</p>
+            <p className="font-light">${total.toFixed(2)}</p>
           </div>
           <div className="flex flex-row justify-between gap-4">
             <p className="font-bold">Envío</p>
@@ -75,7 +75,7 @@ const CheckoutListDesktop = () => {
           </div>
           <div className="mt-4 pt-2 flex flex-row justify-between gap-4 border-t border-t-grisMuyClaro">
             <p className="text-xl font-bold">Total</p>
-            <p className="text-xl font-bold">${total}</p>
+            <p className="text-xl font-bold">${total.toFixed(2)}</p>
           </div>
         </div>
       </div>

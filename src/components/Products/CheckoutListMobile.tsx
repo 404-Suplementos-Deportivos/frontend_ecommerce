@@ -17,7 +17,7 @@ const CheckoutListMobile = () => {
         <div className="flex flex-col w-fit">
           <div className="flex flex-row  gap-4">
             <p className="font-bold">Subtotal</p>
-            <p className="font-light">${total}</p>
+            <p className="font-light">${total.toFixed(2)}</p>
           </div>
           <div className="flex flex-row  gap-4">
             <p className="font-bold">Envío</p>
@@ -26,7 +26,7 @@ const CheckoutListMobile = () => {
         </div>
         <div className="flex flex-row gap-4">
           <p className="text-xl font-bold">Total</p>
-          <p className="text-xl font-bold">${total}</p>
+          <p className="text-xl font-bold">${total.toFixed(2)}</p>
         </div>
       </div>
     </>

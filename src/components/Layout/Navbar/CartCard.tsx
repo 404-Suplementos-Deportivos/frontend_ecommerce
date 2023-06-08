@@ -44,8 +44,8 @@ const CartCard = ({item}: CartCardProps) => {
             />
           </div>
           <div className="flex flex-col items-end">
-            <p>${item.precioVenta}</p>
-            <p><span className="font-bold">Subtotal:</span> ${item.subTotal}</p>
+            <p>${item.precioVenta.toFixed(2)}</p>
+            <p><span className="font-bold">Subtotal:</span> ${item.subTotal?.toFixed(2)}</p>
           </div>
         </div>
       </div>
